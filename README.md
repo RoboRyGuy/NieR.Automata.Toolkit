@@ -1,4 +1,4 @@
-﻿# NieR.Automata.Editor
+﻿# NieR.Automata.Toolkit
 <p align="center">
 	<a href="https://ko-fi.com/C0C01KYIH"><img alt="ko-fi" src="https://www.ko-fi.com/img/githubbutton_sm.svg"/></a> 
 	<br />
@@ -7,6 +7,8 @@
 	<br />
 	<a href="https://github.com/MysteryDash/NieR.Automata.Editor/releases"><img alt="screenshot" src="https://user-images.githubusercontent.com/4283036/79066303-d2927e80-7cf1-11ea-9e98-a85e4cec537e.png"></a>
 </p>
+
+# Notice: This fork is a WIP
 
 A simple yet effective NieR: Automata save editor.
 
