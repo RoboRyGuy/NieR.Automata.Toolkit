@@ -1,4 +1,4 @@
-﻿namespace NieR.Automata.Editor
+﻿namespace NieR.Automata.Toolkit
 {
     partial class Main
     {
@@ -34,8 +34,6 @@
             System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
             System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
             System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-            System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             System.Windows.Forms.TabPage tabPage1;
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
             System.Windows.Forms.Label label5;
@@ -45,7 +43,9 @@
             System.Windows.Forms.Label label4;
             System.Windows.Forms.TabPage tabPage2;
             System.Windows.Forms.TabPage tabPage5;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoReloadFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.load1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.load2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.load3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,28 +63,39 @@
             this.corpseInventoryListView = new BrightIdeasSoftware.ObjectListView();
             this.corpseItemPositionColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.corpseItemIdColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.corpseItemNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.corpseItemQuantityColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.inventoryListView = new BrightIdeasSoftware.ObjectListView();
             this.itemPositionColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.itemIdColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.itemNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.itemQuantityColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.sellChipsListView = new BrightIdeasSoftware.ObjectListView();
+            this.olvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.fuseChipsListView = new BrightIdeasSoftware.ObjectListView();
+            this.olvColumn5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumn6 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumn7 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumn8 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.weaponsListView = new BrightIdeasSoftware.ObjectListView();
             this.weaponPositionColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.weaponObtainedColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.weaponNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.weaponLevelColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.itemNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.corpseItemNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             menuStrip1 = new System.Windows.Forms.MenuStrip();
             fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             tabPage1 = new System.Windows.Forms.TabPage();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             label5 = new System.Windows.Forms.Label();
@@ -107,6 +118,10 @@
             this.tabControl.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inventoryListView)).BeginInit();
+            this.tabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sellChipsListView)).BeginInit();
+            this.tabPage7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fuseChipsListView)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.weaponsListView)).BeginInit();
             this.SuspendLayout();
@@ -117,7 +132,7 @@
             menuStrip1.GripMargin = new System.Windows.Forms.Padding(2);
             menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             fileToolStripMenuItem,
-            donateToolStripMenuItem});
+            this.donateToolStripMenuItem});
             menuStrip1.Location = new System.Drawing.Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new System.Drawing.Size(460, 24);
@@ -130,6 +145,7 @@
             loadToolStripMenuItem,
             this.saveToolStripMenuItem,
             toolStripMenuItem1,
+            this.autoReloadFileToolStripMenuItem,
             this.load1ToolStripMenuItem,
             this.load2ToolStripMenuItem,
             this.load3ToolStripMenuItem,
@@ -142,7 +158,7 @@
             // loadToolStripMenuItem
             // 
             loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
@@ -150,20 +166,28 @@
             // 
             this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new System.Drawing.Size(113, 6);
+            toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // autoReloadFileToolStripMenuItem
+            // 
+            this.autoReloadFileToolStripMenuItem.CheckOnClick = true;
+            this.autoReloadFileToolStripMenuItem.Name = "autoReloadFileToolStripMenuItem";
+            this.autoReloadFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.autoReloadFileToolStripMenuItem.Text = "Watch for Changes";
+            this.autoReloadFileToolStripMenuItem.Click += new System.EventHandler(this.watchToolStripMenuItem_Click);
             // 
             // load1ToolStripMenuItem
             // 
             this.load1ToolStripMenuItem.Enabled = false;
             this.load1ToolStripMenuItem.Name = "load1ToolStripMenuItem";
-            this.load1ToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.load1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.load1ToolStripMenuItem.Text = "Load #1";
             this.load1ToolStripMenuItem.Click += new System.EventHandler(this.load1ToolStripMenuItem_Click);
             // 
@@ -171,7 +195,7 @@
             // 
             this.load2ToolStripMenuItem.Enabled = false;
             this.load2ToolStripMenuItem.Name = "load2ToolStripMenuItem";
-            this.load2ToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.load2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.load2ToolStripMenuItem.Text = "Load #2";
             this.load2ToolStripMenuItem.Click += new System.EventHandler(this.load2ToolStripMenuItem_Click);
             // 
@@ -179,28 +203,20 @@
             // 
             this.load3ToolStripMenuItem.Enabled = false;
             this.load3ToolStripMenuItem.Name = "load3ToolStripMenuItem";
-            this.load3ToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.load3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.load3ToolStripMenuItem.Text = "Load #3";
             this.load3ToolStripMenuItem.Click += new System.EventHandler(this.load3ToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             toolStripMenuItem2.Name = "toolStripMenuItem2";
-            toolStripMenuItem2.Size = new System.Drawing.Size(113, 6);
+            toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             exitToolStripMenuItem.Text = "Exit";
-            // 
-            // donateToolStripMenuItem
-            // 
-            donateToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateToolStripMenuItem.Image")));
-            donateToolStripMenuItem.Name = "donateToolStripMenuItem";
-            donateToolStripMenuItem.Size = new System.Drawing.Size(107, 20);
-            donateToolStripMenuItem.Text = "Like this tool?";
-            donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click);
             // 
             // tabPage1
             // 
@@ -477,6 +493,12 @@
             this.corpseItemIdColumn.IsEditable = false;
             this.corpseItemIdColumn.Text = "Id";
             // 
+            // corpseItemNameColumn
+            // 
+            this.corpseItemNameColumn.AspectName = "Name";
+            this.corpseItemNameColumn.Text = "Name";
+            this.corpseItemNameColumn.Width = 180;
+            // 
             // corpseItemQuantityColumn
             // 
             this.corpseItemQuantityColumn.AspectName = "Quantity";
@@ -484,13 +506,15 @@
             // 
             // tabControl
             // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(tabPage1);
             this.tabControl.Controls.Add(this.tabPage4);
             this.tabControl.Controls.Add(tabPage5);
             this.tabControl.Controls.Add(tabPage2);
+            this.tabControl.Controls.Add(this.tabPage6);
+            this.tabControl.Controls.Add(this.tabPage7);
             this.tabControl.Controls.Add(this.tabPage3);
             this.tabControl.Enabled = false;
             this.tabControl.Location = new System.Drawing.Point(12, 27);
@@ -551,10 +575,125 @@
             this.itemIdColumn.IsEditable = false;
             this.itemIdColumn.Text = "Id";
             // 
+            // itemNameColumn
+            // 
+            this.itemNameColumn.AspectName = "Name";
+            this.itemNameColumn.Text = "Name";
+            this.itemNameColumn.Width = 180;
+            // 
             // itemQuantityColumn
             // 
             this.itemQuantityColumn.AspectName = "Quantity";
             this.itemQuantityColumn.Text = "Quantity";
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.sellChipsListView);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(428, 448);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "Sell Chips";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // sellChipsListView
+            // 
+            this.sellChipsListView.AllColumns.Add(this.olvColumn2);
+            this.sellChipsListView.AllColumns.Add(this.olvColumn3);
+            this.sellChipsListView.AllColumns.Add(this.olvColumn4);
+            this.sellChipsListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
+            this.sellChipsListView.CellEditUseWholeCell = false;
+            this.sellChipsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumn2,
+            this.olvColumn3,
+            this.olvColumn4});
+            this.sellChipsListView.Cursor = System.Windows.Forms.Cursors.Default;
+            this.sellChipsListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sellChipsListView.FullRowSelect = true;
+            this.sellChipsListView.GridLines = true;
+            this.sellChipsListView.HideSelection = false;
+            this.sellChipsListView.Location = new System.Drawing.Point(3, 3);
+            this.sellChipsListView.Name = "sellChipsListView";
+            this.sellChipsListView.ShowGroups = false;
+            this.sellChipsListView.Size = new System.Drawing.Size(422, 442);
+            this.sellChipsListView.TabIndex = 1;
+            this.sellChipsListView.UseCompatibleStateImageBehavior = false;
+            this.sellChipsListView.View = System.Windows.Forms.View.Details;
+            // 
+            // olvColumn2
+            // 
+            this.olvColumn2.AspectName = "Name";
+            this.olvColumn2.Text = "Name";
+            this.olvColumn2.Width = 298;
+            // 
+            // olvColumn3
+            // 
+            this.olvColumn3.AspectName = "Level";
+            this.olvColumn3.Text = "Level";
+            // 
+            // olvColumn4
+            // 
+            this.olvColumn4.AspectName = "Weight";
+            this.olvColumn4.Text = "Weight";
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.fuseChipsListView);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(428, 448);
+            this.tabPage7.TabIndex = 6;
+            this.tabPage7.Text = "Fuse Chips";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // fuseChipsListView
+            // 
+            this.fuseChipsListView.AllColumns.Add(this.olvColumn5);
+            this.fuseChipsListView.AllColumns.Add(this.olvColumn6);
+            this.fuseChipsListView.AllColumns.Add(this.olvColumn7);
+            this.fuseChipsListView.AllColumns.Add(this.olvColumn8);
+            this.fuseChipsListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
+            this.fuseChipsListView.CellEditUseWholeCell = false;
+            this.fuseChipsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumn5,
+            this.olvColumn6,
+            this.olvColumn7,
+            this.olvColumn8});
+            this.fuseChipsListView.Cursor = System.Windows.Forms.Cursors.Default;
+            this.fuseChipsListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fuseChipsListView.FullRowSelect = true;
+            this.fuseChipsListView.GridLines = true;
+            this.fuseChipsListView.HideSelection = false;
+            this.fuseChipsListView.Location = new System.Drawing.Point(3, 3);
+            this.fuseChipsListView.Name = "fuseChipsListView";
+            this.fuseChipsListView.ShowGroups = false;
+            this.fuseChipsListView.Size = new System.Drawing.Size(422, 442);
+            this.fuseChipsListView.TabIndex = 1;
+            this.fuseChipsListView.UseCompatibleStateImageBehavior = false;
+            this.fuseChipsListView.View = System.Windows.Forms.View.Details;
+            // 
+            // olvColumn5
+            // 
+            this.olvColumn5.AspectName = "lower.Name";
+            this.olvColumn5.Text = "Name";
+            this.olvColumn5.Width = 239;
+            // 
+            // olvColumn6
+            // 
+            this.olvColumn6.AspectName = "lower.Level";
+            this.olvColumn6.Text = "Level";
+            // 
+            // olvColumn7
+            // 
+            this.olvColumn7.AspectName = "lower.Weight";
+            this.olvColumn7.Text = "Weight 1";
+            // 
+            // olvColumn8
+            // 
+            this.olvColumn8.AspectName = "upper.Weight";
+            this.olvColumn8.Text = "Weight 2";
             // 
             // tabPage3
             // 
@@ -620,17 +759,13 @@
             this.weaponLevelColumn.AspectName = "Level";
             this.weaponLevelColumn.Text = "Level";
             // 
-            // itemNameColumn
+            // donateToolStripMenuItem
             // 
-            this.itemNameColumn.AspectName = "Name";
-            this.itemNameColumn.Text = "Name";
-            this.itemNameColumn.Width = 180;
-            // 
-            // corpseItemNameColumn
-            // 
-            this.corpseItemNameColumn.AspectName = "Name";
-            this.corpseItemNameColumn.Text = "Name";
-            this.corpseItemNameColumn.Width = 180;
+            this.donateToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateToolStripMenuItem.Image")));
+            this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
+            this.donateToolStripMenuItem.Size = new System.Drawing.Size(107, 20);
+            this.donateToolStripMenuItem.Text = "Like this tool?";
+            this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -641,7 +776,7 @@
             this.Controls.Add(menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
-            this.Text = "NieR: Automata - Save Editor";
+            this.Text = "NieR: Automata Toolkit";
             this.Load += new System.EventHandler(this.Main_Load);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
@@ -659,6 +794,10 @@
             this.tabControl.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.inventoryListView)).EndInit();
+            this.tabPage6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.sellChipsListView)).EndInit();
+            this.tabPage7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.fuseChipsListView)).EndInit();
             this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.weaponsListView)).EndInit();
             this.ResumeLayout(false);
@@ -700,6 +839,19 @@
         private BrightIdeasSoftware.OLVColumn corpseItemQuantityColumn;
         private BrightIdeasSoftware.OLVColumn itemNameColumn;
         private BrightIdeasSoftware.OLVColumn corpseItemNameColumn;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.TabPage tabPage7;
+        private BrightIdeasSoftware.ObjectListView sellChipsListView;
+        private BrightIdeasSoftware.OLVColumn olvColumn2;
+        private BrightIdeasSoftware.OLVColumn olvColumn3;
+        private BrightIdeasSoftware.OLVColumn olvColumn4;
+        private BrightIdeasSoftware.ObjectListView fuseChipsListView;
+        private BrightIdeasSoftware.OLVColumn olvColumn5;
+        private BrightIdeasSoftware.OLVColumn olvColumn6;
+        private BrightIdeasSoftware.OLVColumn olvColumn7;
+        private BrightIdeasSoftware.OLVColumn olvColumn8;
+        private System.Windows.Forms.ToolStripMenuItem autoReloadFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
     }
 }
 

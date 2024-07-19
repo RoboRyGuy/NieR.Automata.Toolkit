@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace NieR.Automata.Editor
+namespace NieR.Automata.Toolkit
 {
     static class Program
     {

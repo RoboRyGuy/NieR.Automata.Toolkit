@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NieR.Automata.Editor
+namespace NieR.Automata.Toolkit
 {
     static class Experience
     {

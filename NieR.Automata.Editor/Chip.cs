@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace NieR.Automata.Editor
+namespace NieR.Automata.Toolkit
 {
     class Chip
     {

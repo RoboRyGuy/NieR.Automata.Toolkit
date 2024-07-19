@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace NieR.Automata.Editor
+namespace NieR.Automata.Toolkit
 {
     class Weapon
     {

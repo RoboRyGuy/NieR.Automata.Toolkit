@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Chip.cs" />
+    <Compile Include="ChipOptimizer.cs" />
     <Compile Include="Experience.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Main.cs">
@@ -118,6 +119,9 @@
     </PackageReference>
     <PackageReference Include="ObjectListView.Official">
       <Version>2.9.1</Version>
+    </PackageReference>
+    <PackageReference Include="Vip.ObjectListView">
+      <Version>1.0.3</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

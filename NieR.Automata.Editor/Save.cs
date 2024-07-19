@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NieR.Automata.Editor
+namespace NieR.Automata.Toolkit
 {
     class Save
     {

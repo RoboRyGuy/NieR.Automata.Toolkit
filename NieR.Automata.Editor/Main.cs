@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 
-namespace NieR.Automata.Editor
+namespace NieR.Automata.Toolkit
 {
     public partial class Main : Form
     {
@@ -19,9 +19,12 @@ namespace NieR.Automata.Editor
 
         private string _savePath;
         private readonly Save _save;
+        private FileSystemWatcher _watcher;
 
         private readonly ComboBox _itemSelectionBox;
         private readonly ComboBox _chipSelectionBox;
+
+        private ChipOptimizer _chipOptimizer;
 
         public Main()
         {
@@ -30,6 +33,12 @@ namespace NieR.Automata.Editor
             var myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             _saveDirectory = Path.Combine(myDocumentsPath, "My Games", "NieR_Automata");
             _save = new Save();
+
+            _watcher = new FileSystemWatcher(_saveDirectory);
+            _watcher.EnableRaisingEvents = false;
+            _watcher.NotifyFilter = NotifyFilters.LastWrite;
+            _watcher.Changed += _watcher_Changed;
+            _watcher.IncludeSubdirectories = false;
 
             _itemSelectionBox = new ComboBox();
             _itemSelectionBox.Font = inventoryListView.Font;
@@ -44,6 +53,8 @@ namespace NieR.Automata.Editor
             _chipSelectionBox.Items.AddRange(Chip.Chips.OrderBy(m => m.Value.Name).Cast<object>().ToArray());
             _chipSelectionBox.DisplayMember = "Value";
             _chipSelectionBox.ValueMember = "Key";
+
+            load3ToolStripMenuItem_Click(null, null);
         }
 
         private void Main_Load(object sender, System.EventArgs e)
@@ -71,6 +82,16 @@ namespace NieR.Automata.Editor
 
             if (dialog.ShowDialog() == DialogResult.OK)
                 LoadSave(dialog.FileName);
+        }
+        private void watchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _watcher.EnableRaisingEvents = !_watcher.EnableRaisingEvents;
+        }
+
+        private void _watcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            if (e.FullPath == _savePath)
+                LoadSave(_savePath);
         }
 
         private void load1ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -120,6 +141,12 @@ namespace NieR.Automata.Editor
 
             tabControl.Enabled = true;
             saveToolStripMenuItem.Enabled = true;
+
+            _chipOptimizer = new ChipOptimizer();
+            _chipOptimizer.Load(_save.Chips);
+
+            sellChipsListView.SetObjects(_chipOptimizer.SellChips);
+            fuseChipsListView.SetObjects(_chipOptimizer.Fusions);
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -291,5 +318,6 @@ namespace NieR.Automata.Editor
                 numericUpDown.Value = Math.Min(4, Math.Max(0, weapon.Level));
             }
         }
+
     }
 }
