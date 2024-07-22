@@ -136,20 +136,20 @@ namespace NieR.Automata.Toolkit
             public ChipCode GetDefuseLower()
             {
                 if (Level <= 0) throw new ArgumentException("Cannot defuse Level 0 chips");
-                return new ChipCode(Type, Level - 1, (int)Math.Floor(Weight - .5 * (Level - 1)));
+                return new ChipCode(Type, Level - 1, (int)Math.Floor(Weight - .5 * Math.Max(Level - 1, 1)));
             }
 
             public ChipCode GetDefuseHigher()
             {
                 if (Level <= 0) throw new ArgumentException("Cannot defuse Level 0 chips");
-                return new ChipCode(Type, Level - 1, (int)Math.Ceiling(Weight - .5 * (Level - 1)));
+                return new ChipCode(Type, Level - 1, (int)Math.Ceiling(Weight - .5 * Math.Max(Level - 1, 1)));
             }
 
             public ChipCode GetFuseComplement(ChipCode target)
             {
                 if (Level == 8) throw new ArgumentException("Cannot fuse level 8 chips!");
                 if ((Level + 1) != target.Level) throw new ArgumentException("Fusions must go up by exactly one level!");
-                return new ChipCode(Type, Level, 2 * target.Weight - Weight - Level);
+                return new ChipCode(Type, Level, 2 * target.Weight - Weight - Math.Max(Level, 1));
             }
 
             public override bool Equals(object o)
@@ -178,26 +178,27 @@ namespace NieR.Automata.Toolkit
                 return x.Type != y.Type || x.Level != y.Level || x.Weight != y.Weight;
             }
 
-            public static bool operator <(ChipCode x, ChipCode y)
+            public static int operator <(ChipCode x, ChipCode y)
             {
                 if (x.Type == y.Type)
-                    if (x.Level == y.Level) return x.Weight < y.Weight;
-                    else return x.Level < y.Level;
-                else return x.Type < y.Type;
+                    if (x.Level == y.Level) return x.Weight - y.Weight;
+                    else return x.Level - y.Level;
+                else return x.Type - y.Type;
             }
 
-            public static bool operator >(ChipCode x, ChipCode y)
+            public static int operator >(ChipCode x, ChipCode y)
             {
                 if (x.Type == y.Type)
-                    if (x.Level == y.Level) return x.Weight > y.Weight;
-                    else return x.Level > y.Level;
-                else return x.Type > y.Type;
+                    if (x.Level == y.Level) return x.Weight - y.Weight;
+                    else return x.Level - y.Level;
+                else return x.Type - y.Type;
             }
         }
 
         // Simple struct to associate two chips prior to a fusion
         public class ChipFusion
         {
+            public ChipCode Code;
             public VirtualChip Lower;
             public VirtualChip Upper;
 
@@ -228,6 +229,7 @@ namespace NieR.Automata.Toolkit
                 if (code.Level <= 0) return null;
 
                 ChipFusion fusion = new ChipFusion();
+                fusion.Code = code;
 
                 ChipCode highestLower = code.GetDefuseLower();
                 fusion.Lower = VirtualChip.AcquireLowest(highestLower, ref set);
@@ -236,6 +238,21 @@ namespace NieR.Automata.Toolkit
                 fusion.Upper = VirtualChip.AcquireExact(complement, ref set);
 
                 return fusion.IsEmpty() ? null : fusion;
+            }
+
+            public void GreedyPass(ref ChipSet set, ref List<ChipFusion> fusions)
+            {
+                if (IsEmpty()) return; // This is an error state, but it doesn't matter too much
+
+                if (Lower == null)
+                    Lower = VirtualChip.AcquireHighest(Upper.Code.GetFuseComplement(Code), ref set);
+                if (Upper == null)
+                    Upper = VirtualChip.AcquireHighest(Lower.Code.GetFuseComplement(Code), ref set);
+                
+                Lower?.GreedyPass(ref set, ref fusions);
+                Upper?.GreedyPass(ref set, ref fusions);
+                
+                if (IsComplete()) fusions.Add(this);
             }
         }
 
@@ -272,16 +289,36 @@ namespace NieR.Automata.Toolkit
             {
                 // Try and get an existing chip
                 VirtualChip chip;
-                for (int i = Chip.MinimumWeightForLevel[code.Level]; i <= code.Level; i++)
+                for (int i = Chip.MinimumWeightForLevel[code.Level]; i <= code.Weight; i++)
                 {
                     chip = set.Pop(new ChipCode(code.Type, code.Level, i));
-                    if (chip == null) return chip;
+                    if (chip != null) return chip;
                 }
 
                 // Otherwise, create a new chip based on a fusion
                 chip = new VirtualChip(code);
                 chip.Fusion = ChipFusion.Make(code, ref set);
                 return chip.Fusion == null ? null : chip;
+            }
+
+            public static VirtualChip AcquireHighest(in ChipCode code, ref ChipSet set)
+            {
+                // Try and get an existing chip
+                VirtualChip chip;
+                for (int i = code.Weight; i >= Chip.MinimumWeightForLevel[code.Level]; i--)
+                {
+                    chip = set.Pop(new ChipCode(code.Type, code.Level, i));
+                    if (chip != null) return chip;
+                }
+
+                // In this particular variant, we're assuming there is no viable fusion
+                return null;
+            }
+
+            public void GreedyPass(ref ChipSet set, ref List<ChipFusion> fusions)
+            {
+                if (!IsFusion()) return;
+                Fusion.GreedyPass(ref set, ref fusions);
             }
         }
 
@@ -322,8 +359,8 @@ namespace NieR.Automata.Toolkit
             new ChipCode(0x22, 8, 21), // Name = "Heal Drops Up"
         };
 
-        public List<ChipFusion> Fusions { get; set; } = new List<ChipFusion>();
-        public List<Chip> SellChips { get; set; } = new List<Chip>();
+        public List<ChipFusion> Fusions = new List<ChipFusion>();
+        public List<Chip> SellChips = new List<Chip>();
 
         public ChipOptimizer() { }
         
@@ -335,40 +372,17 @@ namespace NieR.Automata.Toolkit
                 if (chip.Type != Chip.Empty.Type) chipSet.Add(new VirtualChip(chip));
 
             // Create virtual chips and fusions
-            Queue<VirtualChip> queue = new Queue<VirtualChip>();
             foreach (ChipCode target in DesiredChips)
             {
                 VirtualChip chip = VirtualChip.AcquireLowest(target, ref chipSet);
-                if (chip != null) queue.Enqueue(chip);
+                //chip?.GreedyPass(ref chipSet, ref Fusions);
             }
-            
-            // TODO: Optimize the partial fusions. For now, mark unused chips as sell
+
+            // Any unused chips after the greedy pass are sold
             foreach (VirtualChip chip in chipSet)
-            {
-                if (!chip.IsFusion())
-                {
-                    if (chip.Actual.HasLevels)
-                        SellChips.Add(chip.Actual);
-                }
-            }
+                if (!chip.IsFusion()) if (chip.Actual.HasLevels) SellChips.Add(chip.Actual);
 
-
-            while (queue.Count > 0)
-            {
-                VirtualChip current = queue.Dequeue();
-                if (current.IsFusion())
-                {
-                    if (current.Fusion.Lower != null)
-                        queue.Enqueue(current.Fusion.Lower);
-                    if (current.Fusion.Upper != null)
-                        queue.Enqueue(current.Fusion.Upper);
-
-                    if (current.Fusion.IsComplete())
-                        Fusions.Add(current.Fusion);
-                }
-            }
-
-            Fusions.Reverse();
+            Fusions.Sort((x, y) => x.Code > y.Code);
         }
 
     }
