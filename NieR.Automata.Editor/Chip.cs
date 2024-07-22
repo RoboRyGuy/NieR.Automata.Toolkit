@@ -159,12 +159,14 @@ namespace NieR.Automata.Toolkit
                 chip.Name = knownChip.Name;
                 chip.BaseCode = knownChip.BaseCode;
                 chip.BaseId = knownChip.BaseId;
+                chip.HasLevels = knownChip.HasLevels;
             }
             else if (chip.Type != Empty.Type)
             {
                 chip.Name = "???";
                 chip.BaseCode -= chip.Level;
                 chip.BaseId -= chip.Level;
+                chip.HasLevels = Empty.HasLevels;
             }
 
             return chip;

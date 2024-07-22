@@ -1,245 +1,374 @@
 ﻿using System;
+using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
+using System.Xml.Linq;
 
 namespace NieR.Automata.Toolkit
 {
+
     internal class ChipOptimizer
     {
-        private class ChipComparer : Comparer<Chip>
+        // Contains all the chips in use; an unordered multi-set for chips
+        public class ChipSet : IEnumerable<VirtualChip>
         {
-            public override int Compare(Chip a, Chip b)
+            // Enumerator for the ChipSet enumeration
+            public class ChipSet_Enumerator : IEnumerator<VirtualChip>
             {
-                return MakeCode(a) - MakeCode(b);
+                private Dictionary<ChipCode, Stack<VirtualChip>>.Enumerator _dictionaryEnumerator;
+                private IEnumerator<VirtualChip> _stackEnumerator;
+
+                public object Current => _stackEnumerator.Current;
+                VirtualChip IEnumerator<VirtualChip>.Current => _stackEnumerator.Current;
+
+                public ChipSet_Enumerator(ChipSet set)
+                {
+                    _dictionaryEnumerator = set._set.GetEnumerator();
+                    if (_dictionaryEnumerator.MoveNext())
+                        _stackEnumerator = _dictionaryEnumerator.Current.Value.GetEnumerator();
+                    else
+                        _stackEnumerator = new Stack<VirtualChip>().GetEnumerator();
+                }
+
+                public void Dispose()
+                {
+                    _dictionaryEnumerator.Dispose();
+                    _stackEnumerator.Dispose();
+                }
+
+                public bool MoveNext()
+                {
+                    while (!_stackEnumerator.MoveNext())
+                    {
+                        if (!_dictionaryEnumerator.MoveNext())
+                            return false;
+                        _stackEnumerator.Dispose();
+                        _stackEnumerator = _dictionaryEnumerator.Current.Value.GetEnumerator();
+                    }
+                    return true;
+                }
+
+                public void Reset()
+                {
+                    ((IEnumerator)_dictionaryEnumerator).Reset();
+                    _stackEnumerator.Dispose();
+                    _stackEnumerator = _dictionaryEnumerator.Current.Value.GetEnumerator();
+                }
             }
 
-            private int MakeCode(Chip chip)
+
+            private Dictionary<ChipCode, Stack<VirtualChip>> _set;
+            public ChipSet() { _set = new Dictionary<ChipCode, Stack<VirtualChip>>(); }
+
+            public void Add(VirtualChip chip)
             {
-                return (chip.Type << 16) | ((8 - chip.Level) << 8) | chip.Weight;
+                if (!_set.ContainsKey(chip.Code))
+                    _set[chip.Code] = new Stack<VirtualChip>();
+                _set[chip.Code].Push(chip);
+            }
+
+            public VirtualChip Pop(ChipCode code)
+            {
+                if (_set.TryGetValue(code, out var chips))
+                    if (chips.Count > 0) return chips.Pop();
+                return null;
+            }
+
+            public VirtualChip Peek(ChipCode code)
+            {
+                if (_set.TryGetValue(code, out var chips))
+                    if (chips.Count > 0) return chips.Peek();
+                return null;
+            }
+
+            public IEnumerator<VirtualChip> GetEnumerator()
+            {
+                return new ChipSet_Enumerator(this);
+            }
+            
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return (IEnumerator) new ChipSet_Enumerator(this);
             }
         }
 
-        public class ChipCount
+        // ChipCode refers to set of chip specs. Chip refers to an actual chip in the inventory
+        public struct ChipCode
         {
-            public int code;
-            public Stack<Chip> held = new Stack<Chip>();
-            public int needed = 0;
+            public int Type;
+            public int Level;
+            public int Weight;
 
-            public override string ToString()
+            public ChipCode(int type, int level, int weight)
             {
-                return Chip.Chips[ToType(code)].Name + " +" + ToLevel(code) + " [" + ToWeight(code) + "], held = " + held.Count.ToString() + ", needed = " + needed.ToString();
+                this.Type = type;
+                this.Level = level;
+                this.Weight = weight;
+            }
+
+            public ChipCode(Chip chip)
+            {
+                Type = chip.Type;
+                Level = chip.Level;
+                Weight = chip.Weight;
+            }
+
+            public ChipCode Fuse(ChipCode alt)
+            {
+                return ChipCode.Fuse(this, alt);
+            }
+
+            public static ChipCode Fuse(ChipCode x, ChipCode y)
+            {
+                if (x.Type != y.Type) throw new ArgumentException("Cannot fuse chips of different types");
+                if (x.Level != y.Level) throw new ArgumentException("Cannot fuse chips of different levels");
+                if (x.Level >= 8) throw new ArgumentException("Chips cannot go above level 8");
+                return new ChipCode(x.Type, x.Level + 1, (int)Math.Ceiling((x.Weight + y.Weight + x.Level) * .5));
+            }
+
+            public ChipCode GetDefuseLower()
+            {
+                if (Level <= 0) throw new ArgumentException("Cannot defuse Level 0 chips");
+                return new ChipCode(Type, Level - 1, (int)Math.Floor(Weight - .5 * (Level - 1)));
+            }
+
+            public ChipCode GetDefuseHigher()
+            {
+                if (Level <= 0) throw new ArgumentException("Cannot defuse Level 0 chips");
+                return new ChipCode(Type, Level - 1, (int)Math.Ceiling(Weight - .5 * (Level - 1)));
+            }
+
+            public ChipCode GetFuseComplement(ChipCode target)
+            {
+                if (Level == 8) throw new ArgumentException("Cannot fuse level 8 chips!");
+                if ((Level + 1) != target.Level) throw new ArgumentException("Fusions must go up by exactly one level!");
+                return new ChipCode(Type, Level, 2 * target.Weight - Weight - Level);
+            }
+
+            public override bool Equals(object o)
+            {
+                if (o is not ChipCode) return false;
+                else
+                {
+                    ChipCode other = (ChipCode)o;
+                    return Type == other.Type && Level == other.Level && Weight == other.Weight;
+                }
+            }
+
+            public override int GetHashCode()
+            {
+                // Create unique int based on our stats and hash that instead
+                return (Type << 16 | Level << 8 | Weight).GetHashCode();
+            }
+
+            public static bool operator ==(ChipCode x, ChipCode y)
+            {
+                return x.Type == y.Type && x.Level == y.Level && x.Weight == y.Weight;
+            }
+
+            public static bool operator !=(ChipCode x, ChipCode y)
+            {
+                return x.Type != y.Type || x.Level != y.Level || x.Weight != y.Weight;
+            }
+
+            public static bool operator <(ChipCode x, ChipCode y)
+            {
+                if (x.Type == y.Type)
+                    if (x.Level == y.Level) return x.Weight < y.Weight;
+                    else return x.Level < y.Level;
+                else return x.Type < y.Type;
+            }
+
+            public static bool operator >(ChipCode x, ChipCode y)
+            {
+                if (x.Type == y.Type)
+                    if (x.Level == y.Level) return x.Weight > y.Weight;
+                    else return x.Level > y.Level;
+                else return x.Type > y.Type;
             }
         }
 
+        // Simple struct to associate two chips prior to a fusion
         public class ChipFusion
         {
-            public Chip lower;
-            public Chip upper;
+            public VirtualChip Lower;
+            public VirtualChip Upper;
+
+            private ChipFusion() { Lower = null; Upper = null; }
+            private ChipFusion(VirtualChip lower, VirtualChip upper)
+            {
+                Lower = lower;
+                Upper = upper;
+            }
+
+            public bool IsComplete()
+            {
+                if (Lower == null) return false;
+                if (!(Lower.Fusion?.IsComplete() ?? true)) return false;
+
+                if (Upper == null) return false;
+                if (!(Upper.Fusion?.IsComplete() ?? true)) return false;
+
+                return true;
+            }
+
+            public bool IsPartial() { return Lower != null ^ Upper != null; }
+            public bool IsEmpty() { return Lower == null && Upper == null; }
+
+            public static ChipFusion Make(ChipCode code, ref ChipSet set)
+            {
+                // Can't make a fusion for a level 0
+                if (code.Level <= 0) return null;
+
+                ChipFusion fusion = new ChipFusion();
+
+                ChipCode highestLower = code.GetDefuseLower();
+                fusion.Lower = VirtualChip.AcquireLowest(highestLower, ref set);
+
+                ChipCode complement = fusion.Lower?.Code.GetFuseComplement(code) ?? highestLower.GetFuseComplement(code);
+                fusion.Upper = VirtualChip.AcquireExact(complement, ref set);
+
+                return fusion.IsEmpty() ? null : fusion;
+            }
         }
 
-        public static readonly int[] DesiredChips =
+        // A "virtual" chip; could be an actual chip or a result of a pending fusion
+        public class VirtualChip
         {
-            ToCode(0x01, 8, 21), // Name = "Weapon Attack Up"
-            ToCode(0x02, 8, 21), // Name = "Down-Attack Up"
-            ToCode(0x03, 8, 21), // Name = "Critical Up"
-            ToCode(0x04, 8, 21), // Name = "Ranged Attack Up"
-            ToCode(0x05, 8, 21), // Name = "Fast Cooldown"
-            ToCode(0x06, 8, 21), // Name = "Melee Defence Up"
-            ToCode(0x07, 8, 21), // Name = "Ranged Defence Up"
-            ToCode(0x08, 8, 21), // Name = "Anti Chain Damage"
-            ToCode(0x09, 8, 21), // Name = "Max HP Up"
-            ToCode(0x0A, 8, 21), // Name = "Offensive Heal"
-            ToCode(0x0B, 8, 21), // Name = "Deadly Heal"
-            ToCode(0x0C, 8, 21), // Name = "Auto-Heal"
-            ToCode(0x0D, 8, 21), // Name = "Evade Range Up"
-            ToCode(0x0E, 3, 7 ), // Name = "Moving Speed Up"
-            ToCode(0x0E, 3, 7 ), // Name = "Moving Speed Up"
-            ToCode(0x0F, 4, 9 ), // Name = "Drop Rate Up"
-            ToCode(0x0F, 3, 7 ), // Name = "Drop Rate Up"
-            ToCode(0x10, 8, 21), // Name = "EXP Gain Up"
-            ToCode(0x11, 8, 21), // Name = "Shock Wave"
-            ToCode(0x12, 8, 21), // Name = "Last Stand"
-            ToCode(0x13, 8, 21), // Name = "Damage Absorb"
-            ToCode(0x14, 8, 21), // Name = "Vengeance"
-            ToCode(0x15, 8, 21), // Name = "Reset"
-            ToCode(0x16, 8, 21), // Name = "Overclock"
-            ToCode(0x17, 8, 21), // Name = "Resilience"
-            ToCode(0x18, 8, 21), // Name = "Counter"
-            ToCode(0x19, 8, 21), // Name = "Taunt Up"
-            ToCode(0x1A, 8, 21), // Name = "Charge Attack"
-            ToCode(0x1B, 8, 21), // Name = "Auto-use Item"
-            ToCode(0x1D, 8, 21), // Name = "Hijack Boost"
-            ToCode(0x1E, 8, 21), // Name = "Stun"
-            ToCode(0x1F, 8, 21), // Name = "Combust"
-            ToCode(0x22, 8, 21), // Name = "Heal Drops Up"
-        };
-        public static readonly double[] AvgWeights = { 7, 7.5, 8.5, 10, 12, 14.5, 17.5, 21, 21 };
-        public static readonly Dictionary<int, List<int>> PreferredFusions = new Dictionary<int, List<int>>()
+            public ChipCode Code { get; private set; }
+            public Chip Actual { get; private set; } = null;
+            public ChipFusion Fusion { get; private set; } = null;
+
+            public String Name => Chip.Chips[Code.Type].Name;
+            public int Level => Code.Level;
+            public int Weight => Code.Weight;
+
+            public VirtualChip(Chip chip) { Code = new ChipCode(chip); Actual = chip; }
+            private VirtualChip(ChipCode code) { Code = code; }
+
+            public bool IsValid() { return Actual == null ^ Fusion == null; }
+            public bool IsFusion() { return Actual == null; }
+
+            public static VirtualChip AcquireExact(in ChipCode code, ref ChipSet set)
+            {
+                // Try and get an existing chip
+                VirtualChip chip = set.Pop(code);
+                if (chip != null) return chip;
+
+                // Otherwise, create a new chip based on a fusion
+                chip = new VirtualChip(code);
+                chip.Fusion = ChipFusion.Make(code, ref set);
+                return chip.Fusion == null ? null : chip;
+            }
+
+            public static VirtualChip AcquireLowest(in ChipCode code, ref ChipSet set)
+            {
+                // Try and get an existing chip
+                VirtualChip chip;
+                for (int i = Chip.MinimumWeightForLevel[code.Level]; i <= code.Level; i++)
+                {
+                    chip = set.Pop(new ChipCode(code.Type, code.Level, i));
+                    if (chip == null) return chip;
+                }
+
+                // Otherwise, create a new chip based on a fusion
+                chip = new VirtualChip(code);
+                chip.Fusion = ChipFusion.Make(code, ref set);
+                return chip.Fusion == null ? null : chip;
+            }
+        }
+
+        public static readonly ChipCode[] DesiredChips =
         {
-            [ToCode(0, 0, 4 )] = new List<int>() { 5, 9, 7, 11, 13 },
-            [ToCode(0, 0, 5 )] = new List<int>() { 6, 8, 10, 12 },
-            [ToCode(0, 0, 6 )] = new List<int>() { 7, 9, 11 },
-            [ToCode(0, 0, 7 )] = new List<int>() { 8, 10 },
-            [ToCode(0, 0, 8 )] = new List<int>() { 9 },
-            [ToCode(0, 1, 5 )] = new List<int>() { 6, 8, 10, 12 },
-            [ToCode(0, 1, 6 )] = new List<int>() { 7, 9, 11 },
-            [ToCode(0, 1, 7 )] = new List<int>() { 8, 10 },
-            [ToCode(0, 1, 8 )] = new List<int>() { 9 },
-            [ToCode(0, 2, 6 )] = new List<int>() { 6, 10, 8, 12 },
-            [ToCode(0, 2, 7 )] = new List<int>() { 7, 11, 9 },
-            [ToCode(0, 2, 8 )] = new List<int>() { 8, 10 },
-            [ToCode(0, 2, 9 )] = new List<int>() { 9 },
-            [ToCode(0, 3, 7 )] = new List<int>() { 8, 12, 10 },
-            [ToCode(0, 3, 8 )] = new List<int>() { 9, 11 },
-            [ToCode(0, 3, 9 )] = new List<int>() { 10 },
-            [ToCode(0, 4, 9 )] = new List<int>() { 9, 13, 11 },
-            [ToCode(0, 4, 10)] = new List<int>() { 10, 12 },
-            [ToCode(0, 4, 11)] = new List<int>() { 11 },
-            [ToCode(0, 5, 11)] = new List<int>() { 12, 14 },
-            [ToCode(0, 5, 12)] = new List<int>() { 13 },
-            [ToCode(0, 6, 14)] = new List<int>() { 14, 16 },
-            [ToCode(0, 6, 15)] = new List<int>() { 15 },
-            [ToCode(0, 7, 17)] = new List<int>() { 18 },
+            new ChipCode(0x01, 8, 21), // Name = "Weapon Attack Up"
+            new ChipCode(0x02, 8, 21), // Name = "Down-Attack Up"
+            new ChipCode(0x03, 8, 21), // Name = "Critical Up"
+            new ChipCode(0x04, 8, 21), // Name = "Ranged Attack Up"
+            new ChipCode(0x05, 8, 21), // Name = "Fast Cooldown"
+            new ChipCode(0x06, 8, 21), // Name = "Melee Defence Up"
+            new ChipCode(0x07, 8, 21), // Name = "Ranged Defence Up"
+            new ChipCode(0x08, 8, 21), // Name = "Anti Chain Damage"
+            new ChipCode(0x09, 8, 21), // Name = "Max HP Up"
+            new ChipCode(0x0A, 8, 21), // Name = "Offensive Heal"
+            new ChipCode(0x0B, 8, 21), // Name = "Deadly Heal"
+            new ChipCode(0x0C, 8, 21), // Name = "Auto-Heal"
+            new ChipCode(0x0D, 8, 21), // Name = "Evade Range Up"
+            new ChipCode(0x0E, 3, 7 ), // Name = "Moving Speed Up"
+            new ChipCode(0x0E, 3, 7 ), // Name = "Moving Speed Up"
+            new ChipCode(0x0F, 4, 9 ), // Name = "Drop Rate Up"
+            new ChipCode(0x0F, 3, 7 ), // Name = "Drop Rate Up"
+            new ChipCode(0x10, 8, 21), // Name = "EXP Gain Up"
+            new ChipCode(0x11, 8, 21), // Name = "Shock Wave"
+            new ChipCode(0x12, 8, 21), // Name = "Last Stand"
+            new ChipCode(0x13, 8, 21), // Name = "Damage Absorb"
+            new ChipCode(0x14, 8, 21), // Name = "Vengeance"
+            new ChipCode(0x15, 8, 21), // Name = "Reset"
+            new ChipCode(0x16, 8, 21), // Name = "Overclock"
+            new ChipCode(0x17, 8, 21), // Name = "Resilience"
+            new ChipCode(0x18, 8, 21), // Name = "Counter"
+            new ChipCode(0x19, 8, 21), // Name = "Taunt Up"
+            new ChipCode(0x1A, 8, 21), // Name = "Charge Attack"
+            new ChipCode(0x1B, 8, 21), // Name = "Auto-use Item"
+            new ChipCode(0x1D, 8, 21), // Name = "Hijack Boost"
+            new ChipCode(0x1E, 8, 21), // Name = "Stun"
+            new ChipCode(0x1F, 8, 21), // Name = "Combust"
+            new ChipCode(0x22, 8, 21), // Name = "Heal Drops Up"
         };
 
-        public SortedList<int, ChipCount> Counts { get; protected set; }
-        public List<Chip> DesiredsObtained = new List<Chip>();
-        public List<ChipFusion> Fusions = new List<ChipFusion>();
-        public List<Chip> SellChips = new List<Chip>();
-        public List<Chip> HoldOntoChips = new List<Chip>();
+        public List<ChipFusion> Fusions { get; set; } = new List<ChipFusion>();
+        public List<Chip> SellChips { get; set; } = new List<Chip>();
 
         public ChipOptimizer() { }
         
         public void Load(in List<Chip> chips)
         {
-            // Start by loading all these chips into our model
-            Counts = new SortedList<int, ChipCount>();
-            foreach (Chip chip in chips)
-            {
-                // If the chip cannot be fused or is invalid, skip it
-                if (chip.Type <= 0 || !chip.HasLevels || chip.Type > 0x22) continue;
+            // Create our chipset from the input chips
+            ChipSet chipSet = new ChipSet();
+            foreach (Chip chip in chips) 
+                if (chip.Type != Chip.Empty.Type) chipSet.Add(new VirtualChip(chip));
 
-                // Add the chip to the relevant list
-                ChipCount count = GetOrCreate(Counts, ToCode(chip));
-                count.held.Push(chip);
+            // Create virtual chips and fusions
+            Queue<VirtualChip> queue = new Queue<VirtualChip>();
+            foreach (ChipCode target in DesiredChips)
+            {
+                VirtualChip chip = VirtualChip.AcquireLowest(target, ref chipSet);
+                if (chip != null) queue.Enqueue(chip);
             }
-
-            // Add in our desired chips
-            foreach (int code in DesiredChips)
+            
+            // TODO: Optimize the partial fusions. For now, mark unused chips as sell
+            foreach (VirtualChip chip in chipSet)
             {
-                ChipCount count = GetOrCreate(Counts, code);
-                count.needed++;
-            }
-
-            // Iterate through and generate a list of needed chips. Start with high-level chips and work down
-            for (int i = 0; i < Counts.Count; i++)
-            {
-                ChipCount count = Counts.ElementAt(i).Value;
-                
-                // Subtract what we already have for a more accurate need count
-                count.needed -= count.held.Count;
-
-                if (count.needed > 0)
+                if (!chip.IsFusion())
                 {
-                    // Calculate the two 'optimal' chips needed
-                    int code = Counts.ElementAt(i).Key;
-                    int type = ToType(code);
-                    int level = ToLevel(code) - 1;
-
-                    if (level == 0) continue; // We can skip level 0; we don't need it
-
-                    // These weights could turn out to be the same. It works out either way
-                    int lWeight = (int)Math.Floor  (ToWeight(code) - (level * .5));
-                    int hWeight = (int)Math.Ceiling(ToWeight(code) - (level * .5));
-
-                    // Simply add the needs to the children; they'll be processed later, since they're a lower level
-                    ChipCount lChild = GetOrCreate(Counts, ToCode(type, level, lWeight));
-                    lChild.needed += count.needed;
-                    ChipCount hChild = GetOrCreate(Counts, ToCode(type, level, hWeight));
-                    hChild.needed += count.needed;
+                    if (chip.Actual.HasLevels)
+                        SellChips.Add(chip.Actual);
                 }
             }
 
-            // Start fusing chips. Starting from level 0, make pairs based on needs. Decide fuse, keep, and sell
-            while (Counts.Count > 0)
-            {
-                ChipCount count = Counts.Last().Value;
-                List<int> pairWeights = null;
-                PreferredFusions.TryGetValue(ToCode(0, ToLevel(Counts.Last().Key), ToWeight(Counts.Last().Key)), out pairWeights);
 
-                while (count.held.Count > 0)
+            while (queue.Count > 0)
+            {
+                VirtualChip current = queue.Dequeue();
+                if (current.IsFusion())
                 {
-                    // Current chip stats
-                    Chip current = count.held.Pop();
-                    int levelWeight = current.Level == 0 ? 1 : current.Level;
+                    if (current.Fusion.Lower != null)
+                        queue.Enqueue(current.Fusion.Lower);
+                    if (current.Fusion.Upper != null)
+                        queue.Enqueue(current.Fusion.Upper);
 
-                    if (pairWeights != null)
-                    {
-                        foreach (int weight in pairWeights)
-                        {
-                            int targetCode = ToCode(current.Type, current.Level, (int)Math.Ceiling((current.Weight + weight + levelWeight) * .5));
-                            ChipCount targetCount = GetOrCreate(Counts, targetCode);
-                            if (targetCount.needed > 0)
-                            {
-                                ChipCount pairCount = GetOrCreate(Counts, ToCode(current.Type, current.Level, weight));
-                                if (pairCount.held.Count > 0)
-                                    Fusions.Add(new ChipFusion() { lower = current, upper = pairCount.held.Pop() });
-                                else
-                                    HoldOntoChips.Add(current);
-                                targetCount.needed--;
-                                current = null;
-                                break;
-                            }
-                        }
-                    }
-
-                    // If this chip was not needed
-                    if (current != null)
-                        SellChips.Add(current);
+                    if (current.Fusion.IsComplete())
+                        Fusions.Add(current.Fusion);
                 }
-
-                Counts.Remove(Counts.Last().Key);
-            }
-        }
-
-        private static int ToCode(in Chip chip)
-        {
-            return ToCode(chip.Type, chip.Level, chip.Weight);
-        }
-
-        private static int ToCode(int type, int level, int weight)
-        {
-            return (type << 16) | ((8 - level) << 8) | (255 - weight);
-        }
-
-        private static int ToType(int code)
-        {
-            return (code >> 16) & 0xFF;
-        }
-        private static int ToLevel(int code)
-        {
-            return 8 - ((code >> 8) & 0xFF);
-        }
-        private static int ToWeight(int code)
-        {
-            return 255 - (code & 0xFF);
-        }
-
-        private static ChipCount GetOrCreate(IDictionary<int, ChipCount> dict, int key)
-        {
-            if (!dict.TryGetValue(key, out ChipCount val))
-            {
-                val = new ChipCount() { code = key };
-                dict.Add(key, val);
             }
 
-            return val;
-
+            Fusions.Reverse();
         }
 
     }
