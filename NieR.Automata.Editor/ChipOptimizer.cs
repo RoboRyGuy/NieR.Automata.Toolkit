@@ -2,14 +2,11 @@
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
-using System.Xml.Linq;
+using System.Security.Cryptography;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace NieR.Automata.Toolkit
 {
@@ -17,16 +14,16 @@ namespace NieR.Automata.Toolkit
     internal class ChipOptimizer
     {
         // Contains all the chips in use; an unordered multi-set for chips
-        public class ChipSet : IEnumerable<VirtualChip>
+        public class ChipSet : IEnumerable<Chip>
         {
             // Enumerator for the ChipSet enumeration
-            public class ChipSet_Enumerator : IEnumerator<VirtualChip>
+            public class ChipSet_Enumerator : IEnumerator<Chip>
             {
-                private Dictionary<ChipCode, Stack<VirtualChip>>.Enumerator _dictionaryEnumerator;
-                private IEnumerator<VirtualChip> _stackEnumerator;
+                private Dictionary<ChipCode, Stack<Chip>>.Enumerator _dictionaryEnumerator;
+                private IEnumerator<Chip> _stackEnumerator;
 
                 public object Current => _stackEnumerator.Current;
-                VirtualChip IEnumerator<VirtualChip>.Current => _stackEnumerator.Current;
+                Chip IEnumerator<Chip>.Current => _stackEnumerator.Current;
 
                 public ChipSet_Enumerator(ChipSet set)
                 {
@@ -34,7 +31,7 @@ namespace NieR.Automata.Toolkit
                     if (_dictionaryEnumerator.MoveNext())
                         _stackEnumerator = _dictionaryEnumerator.Current.Value.GetEnumerator();
                     else
-                        _stackEnumerator = new Stack<VirtualChip>().GetEnumerator();
+                        _stackEnumerator = new Stack<Chip>().GetEnumerator();
                 }
 
                 public void Dispose()
@@ -63,29 +60,46 @@ namespace NieR.Automata.Toolkit
                 }
             }
 
+            private Dictionary<ChipCode, Stack<Chip>> _set;
+            public ChipSet() { _set = new Dictionary<ChipCode, Stack<Chip>>(); }
 
-            private Dictionary<ChipCode, Stack<VirtualChip>> _set;
-            public ChipSet() { _set = new Dictionary<ChipCode, Stack<VirtualChip>>(); }
-
-            public void Add(VirtualChip chip)
+            public void Add(Chip chip)
             {
-                if (!_set.ContainsKey(chip.Code))
-                    _set[chip.Code] = new Stack<VirtualChip>();
-                _set[chip.Code].Push(chip);
+                ChipCode code = new ChipCode(chip);
+                if (!_set.ContainsKey(code))
+                    _set[code] = new Stack<Chip>();
+                _set[code].Push(chip);
             }
 
-            public VirtualChip Pop(ChipCode code)
+            public Chip Pop(ChipCode code)
             {
                 if (_set.TryGetValue(code, out var chips))
-                    if (chips.Count > 0) return chips.Pop();
+                    if (chips.Count > 0)
+                    {
+                        var chip = chips.Pop();
+                        if (chips.Count == 0) _set.Remove(code);
+                        return chip;
+                    }
                 return null;
             }
 
-            public VirtualChip Peek(ChipCode code)
+            public bool TryPop(ChipCode code, out Chip chip)
+            {
+                chip = Pop(code);
+                return chip != null;
+            }
+
+            public Chip Peek(ChipCode code)
             {
                 if (_set.TryGetValue(code, out var chips))
                     if (chips.Count > 0) return chips.Peek();
                 return null;
+            }
+
+            public bool TryPeek(ChipCode code, out Chip chip)
+            {
+                chip = Peek(code);
+                return chip != null;
             }
 
             public int GetCountOf(ChipCode code)
@@ -95,7 +109,7 @@ namespace NieR.Automata.Toolkit
                 return 0;
             }
 
-            public IEnumerator<VirtualChip> GetEnumerator()
+            public IEnumerator<Chip> GetEnumerator()
             {
                 return new ChipSet_Enumerator(this);
             }
@@ -106,8 +120,51 @@ namespace NieR.Automata.Toolkit
             }
         }
 
+        // Priority queue, because this version of c# doesn't have one and all the sorted collections suck
+        // Note that this isn't optimal, it's just near-optimal for my specific use case
+        public class PriorityQueue<TValue>
+        {
+            private List<TValue> _values;
+            private IComparer<TValue> _comparer;
+
+            public PriorityQueue() { _values = new List<TValue>(); _comparer = Comparer<TValue>.Default; }
+            public PriorityQueue(IComparer<TValue> comparer) { _values = new List<TValue>(); _comparer = comparer; }
+
+            public void Enqueue(TValue value)
+            {
+                int index;
+                for (index = 0; index < _values.Count; index++)
+                    if (_comparer.Compare(value, _values[index]) > 0) break;
+                _values.Insert(index, value);
+            }
+
+            public TValue Dequeue()
+            {
+                if (_values.Count == 0) throw new InvalidOperationException("Cannot dequeue empty queue!");
+
+                TValue value = _values.Last();
+                _values.RemoveAt(_values.Count - 1);
+                return value;
+            }
+
+            public bool TryDequeue(out TValue value)
+            {
+                if (_values.Count == 0)
+                {
+                    value = default(TValue);
+                    return false;
+                }
+                else
+                {
+                    value = _values.Last();
+                    _values.RemoveAt(_values.Count - 1);
+                    return true;
+                }
+            }
+        }
+
         // ChipCode refers to set of chip specs. Chip refers to an actual chip in the inventory
-        public struct ChipCode
+        public struct ChipCode : IComparable<ChipCode>
         {
             public int Type;
             public int Level;
@@ -146,7 +203,7 @@ namespace NieR.Automata.Toolkit
                 return new ChipCode(Type, Level - 1, (int)Math.Floor(Weight - .5 * Math.Max(Level - 1, 1)));
             }
 
-            public ChipCode GetDefuseHigher()
+            public ChipCode GetDefuseUpper()
             {
                 if (Level <= 0) throw new ArgumentException("Cannot defuse Level 0 chips");
                 return new ChipCode(Type, Level - 1, (int)Math.Ceiling(Weight - .5 * Math.Max(Level - 1, 1)));
@@ -159,14 +216,12 @@ namespace NieR.Automata.Toolkit
                 return new ChipCode(Type, Level, 2 * target.Weight - Weight - Math.Max(Level, 1));
             }
 
-            public override bool Equals(object o)
+            public int CompareTo(ChipCode other)
             {
-                if (o is not ChipCode) return false;
-                else
-                {
-                    ChipCode other = (ChipCode)o;
-                    return Type == other.Type && Level == other.Level && Weight == other.Weight;
-                }
+                if (Type.CompareTo(other.Type) != 0) return Type.CompareTo(other.Type);
+                else if (Level.CompareTo(other.Level) != 0) return Level.CompareTo(other.Level);
+                else if (Weight.CompareTo(other.Weight) != 0) return Weight.CompareTo(other.Weight);
+                else return 0;
             }
 
             public override int GetHashCode()
@@ -174,52 +229,32 @@ namespace NieR.Automata.Toolkit
                 // Create unique int based on our stats and hash that instead
                 return (Type << 16 | Level << 8 | Weight).GetHashCode();
             }
-
-            public static bool operator ==(ChipCode x, ChipCode y)
-            {
-                return x.Type == y.Type && x.Level == y.Level && x.Weight == y.Weight;
-            }
-
-            public static bool operator !=(ChipCode x, ChipCode y)
-            {
-                return x.Type != y.Type || x.Level != y.Level || x.Weight != y.Weight;
-            }
-
-            public static int operator <(ChipCode x, ChipCode y)
-            {
-                if (x.Type == y.Type)
-                    if (x.Level == y.Level) return x.Weight - y.Weight;
-                    else return x.Level - y.Level;
-                else return x.Type - y.Type;
-            }
-
-            public static int operator >(ChipCode x, ChipCode y)
-            {
-                if (x.Type == y.Type)
-                    if (x.Level == y.Level) return x.Weight - y.Weight;
-                    else return x.Level - y.Level;
-                else return x.Type - y.Type;
-            }
         }
 
         // A "virtual" chip; could be an actual chip or a result of a pending fusion
-        public class VirtualChip
+        public class VirtualChip : IComparable<VirtualChip>
         {
             // Code containing the stats this chip represents
             public ChipCode Code { get; private set; }
 
             // A reference to an actual chip this virtual chip wraps. If null, this chip is a fusion
-            public Chip Actual { get; private set; } = null;
+            private Chip _actual = null;
+            public Chip Actual { get => _actual; private set => _actual = value; }
 
-            // The chip with a lower weight value if this chip is a fusion
-            public VirtualChip Lower { get; private set; } = null;
+            // If there is no actual chip, this will be the lower chip in a fusion; said chip will have a complement
+            private VirtualChip _fusion = null;
+            public VirtualChip Fusion { get => _fusion; private set => _fusion = value; }
 
-            // The chip with a higher weight value if this chip is a fusion
-            public VirtualChip Upper { get; private set; } = null;
+            // If this chip is part of a fusion, this is the chip it will fuse with
+            private VirtualChip _complement = null;
+            public VirtualChip Complement { get => _complement; private set => _complement = value; }
 
 
             // Name of the chip this virtual chip represents
             public String Name => Chip.Chips[Code.Type].Name;
+
+            // Type of the chip this virtual chip represents
+            public int Type => Code.Type;
 
             // Level of the chip this virtual chip represents
             public int Level => Code.Level;
@@ -227,241 +262,105 @@ namespace NieR.Automata.Toolkit
             // Weight of the chip this virtual chip represents
             public int Weight => Code.Weight;
 
-            
-            // True if this chip does not directly contain an actual chip
-            public bool IsFusion => Actual == null;
+
+            // True if this chip directly contains an actual chip
+            public bool HasActual => Actual != null;
+
+            // True if this chip contains a fusion
+            public bool HasFusion => Fusion != null;
+
+            // True if this chip is part of a fusion
+            public bool IsFusion => Complement != null;
+
+            // True if this chip is part of a fusion and is the upper chip
+            public bool IsFusionLower => Complement != null;
+
 
             // True if there is no actual chips associated with this or its children
-            public bool IsEmpty => IsFusion && (Lower?.IsEmpty ?? true) && (Upper?.IsEmpty ?? true);
-            
+            public bool IsEmpty => !HasActual && (Fusion?.IsEmpty ?? true) && (Complement?.IsEmpty ?? true);
+
             // True if this chip either is a chip or can fuse into a chip
-            public bool IsFullChip => (!IsFusion) || CanFuse;
+            public bool IsFullChip => HasActual || HasCompleteFusion;
 
             // True if this chip is a fusion and has children it can fuse together
-            public bool CanFuse => IsFusion && (Lower?.IsFullChip ?? false) && (Upper?.IsFullChip ?? false);
+            public bool HasCompleteFusion => Fusion?.CanBeFused ?? false;
+
+            // True if this chip is part of a fusion and both it and its complement can fuse
+            public bool CanBeFused => IsFullChip && (Complement?.IsFullChip ?? false);
 
 
             // Constructs this chip in order to wrap an actual chip
             public VirtualChip(Chip chip) { Code = new ChipCode(chip); Actual = chip; }
-            
+
             // Constructs this chip to represent a fusion of some kind
-            private VirtualChip(ChipCode code) { Code = code; }
+            public VirtualChip(ChipCode code) { Code = code; }
 
-
-            /// <summary>
-            /// Either claims actual chips or creates chip fusions for the requested chip code and qty.
-            /// This will only claim chips of the exact weight requested.
-            /// </summary>
-            /// <param name="set">The ChipSet to try and claim chips from</param>
-            /// <param name="code">Code representing the desired chip</param>
-            /// <param name="qty">How many chips to acquire</param>
-            /// <param name="fuse">If true, will create fusions to make up non-found chips</param>
-            /// <returns>
-            /// A list of chips. 
-            ///   If fuse=true,  this will be qty long.
-            ///   If fuse=false, this will be up to qty long and will only contain found chips.
-            /// </returns>
-            public static List<VirtualChip> AcquireExact(ref ChipSet set, in ChipCode code, int qty = 1, bool fuse = true)
+            public int CompareTo(VirtualChip other)
             {
-                List<VirtualChip> output = new List<VirtualChip>();
-                
-                // Try and get existing chips
-                while (output.Count < qty)
-                {
-                    var chip = set.Pop(code);
-                    if (chip != null) output.Add(chip);
-                    else break;
-                }
-
-                // Otherwise, create a new chip based on a fusion
-                if ((output.Count != qty) && fuse)
-                    output.AddRange(MakeFusion(ref set, code, qty - output.Count));
-                return output;
+                if (Type.CompareTo(other.Type) != 0) return Type.CompareTo(other.Type);
+                else if (Level.CompareTo(other.Level) != 0) return -Level.CompareTo(other.Level);
+                else if (Weight.CompareTo(other.Weight) != 0) return Weight.CompareTo(other.Weight);
+                else if (IsFusionLower.CompareTo(other.IsFusionLower) != 0) return -IsFusionLower.CompareTo(other.IsFusionLower);
+                else return 0;
             }
 
-            /// <summary>
-            /// Either claims actual chips or creates chip fusions for the requested chip code and qty.
-            /// This will claim chips equal to or below the weight requested, with a preference for low weight.
-            /// </summary>
-            /// <param name="set">The ChipSet to try and claim chips from</param>
-            /// <param name="code">Code representing the desired chip</param>
-            /// <param name="qty">How many chips to acquire</param>
-            /// <param name="fuse">If true, will create fusions to make up non-found chips</param>
-            /// <returns>
-            /// A list of chips. 
-            ///   If fuse=true,  this will be qty long.
-            ///   If fuse=false, this will be up to qty long and will only contain found chips.
-            /// </returns>
-            public static List<VirtualChip> AcquireLowest(ref ChipSet set, in ChipCode code, int qty = 1, bool fuse = true)
+            public void Resolve(ref ChipSet chips, ref PriorityQueue<VirtualChip> queue)
             {
-                List<VirtualChip> output = new List<VirtualChip>();
+                // Check if we're already resolved
+                Debug.Assert(!IsFullChip);
 
-                // Try and get existing chips
-                for (int i = Chip.MinimumWeightForLevel[code.Level]; i >= code.Weight; i--)
-                {
-                    while (output.Count < qty)
-                    {
-                        var chip = set.Pop(new ChipCode(code.Type, code.Level, i));
-                        if (chip != null) output.Add(chip);
-                        else break;
-                    }
-                }
-
-                // Otherwise, create a new chip based on a fusion
-                if ((output.Count != qty) && fuse)
-                    output.AddRange(MakeFusion(ref set, code, qty - output.Count));
-                return output;
-            }
-
-            /// <summary>
-            /// Either claims actual chips or creates chip fusions for the requested chip code and qty.
-            /// This will claim chips equal to or below the weight requested, with a preference for high weight.
-            /// </summary>
-            /// <param name="set">The ChipSet to try and claim chips from</param>
-            /// <param name="code">Code representing the desired chip</param>
-            /// <param name="qty">How many chips to acquire</param>
-            /// <param name="fuse">If true, will create fusions to make up non-found chips</param>
-            /// <returns>
-            /// A list of chips. 
-            ///   If fuse=true,  this will be qty long.
-            ///   If fuse=false, this will be up to qty long and will only contain found chips.
-            /// </returns>
-            public static List<VirtualChip> AcquireHighest(ref ChipSet set, in ChipCode code, int qty = 1, bool fuse = true)
-            {
-                List<VirtualChip> output = new List<VirtualChip>();
-
-                // Try and get existing chips
-                for (int i = code.Weight; i >= Chip.MinimumWeightForLevel[code.Level]; i--)
-                {
-                    while (output.Count < qty)
-                    {
-                        var chip = set.Pop(new ChipCode(code.Type, code.Level, i));
-                        if (chip != null) output.Add(chip);
-                        else break;
-                    }
-                }
-
-                // Otherwise, create a new chip based on a fusion
-                if ((output.Count != qty) && fuse)
-                    output.AddRange(MakeFusion(ref set, code, qty - output.Count));
-                return output;
-            }
-
-            /// <summary>
-            /// Creates fusions for the request chip code and qty.
-            /// </summary>
-            /// <param name="set">The ChipSet to try and claim chips from</param>
-            /// <param name="code">Code representing the desired chip</param>
-            /// <param name="qty">How many chips to create fusions for</param>
-            /// <returns>A list of fusions. This will be qty long</returns>
-            public static List<VirtualChip> MakeFusion(ref ChipSet set, in ChipCode code, int qty = 1)
-            {
-                // This function guarantees delivery of items. Therefore, prep the whole list in advance
-                List<VirtualChip> output = new List<VirtualChip>();
-                for (int i = 0; i < qty; i++) output.Add(new VirtualChip(code));
-
-                // Can't make fusions for level 0 chips
-                if (code.Level <= 0) return output;
-
-                // Even and odd chip levels are processed different to help assert delivery
-                if (code.Level % 2 == 1)
-                {
-                    // Obtain the lower chips needed for fusion
-                    ChipCode highestLower = code.GetDefuseLower();
-                    {
-                        List<VirtualChip> lowers = AcquireLowest(ref set, highestLower, qty);
-                        lowers.Sort((x, y) => x.Code > y.Code);
-                        for (int i = 0; i < qty; i++) output[i].Lower = lowers[i];
-                    }
-
-                    // Obtain the upper chips; since the lower chips may be different levels,
-                    //  we count out how many are of a certain level and batch the uppers
-                    int lastProcessed = 0;
-                    while (lastProcessed < qty)
-                    {
-                        // This section gets a count of identical chips
-                        ChipCode common = output[lastProcessed].Lower?.Code ?? highestLower;
-                        int count;
-                        for (count = 1; count < qty - lastProcessed; count++) 
-                            if ((output[lastProcessed + count].Lower?.Code ?? highestLower) != common) break;
-
-                        // This section obtains those chips and organizes them
-                        ChipCode complement = common.GetFuseComplement(code);
-                        List<VirtualChip> uppers = AcquireHighest(ref set, complement, count);
-                        uppers.Sort((x, y) => x.Code > y.Code);
-                        for (int i = lastProcessed; i < lastProcessed + count; i++) 
-                            output[lastProcessed + i].Upper = uppers[i];
-
-                        // Mark how many chips have been finished
-                        lastProcessed += count;
-                    }
-                }
+                // Try and claim an actual chip
+                int i;
+                if (IsFusionLower)
+                    for (i = Chip.MinimumWeightForLevel[Level]; i <= Weight; i++)
+                        if (chips.TryPop(new ChipCode(Type, Level, i), out _actual)) break; else;
                 else
+                    for (i = Weight; i >= Chip.MinimumWeightForLevel[Level]; i--)
+                        if (chips.TryPop(new ChipCode(Type, Level, i), out _actual)) break;
+
+                // If we claimed an actual chip, update our complement (if it exists)
+                if (HasActual)
                 {
-                    // Obtain as many below-average chips as possible without making fusions
-                    ChipCode highestLower = code.GetDefuseLower();
-                    List<VirtualChip> children = AcquireLowest(ref set, new ChipCode(highestLower.Type, highestLower.Level, highestLower.Weight - 1), qty, false);
-                    int lowers = children.Count;
-
-                    // Grab as many strictly-average chips as we need
-                    if (lowers < qty)
-                        children.AddRange(AcquireExact(ref set, highestLower, 2 * (qty - lowers)));
-
-                    // Since all the below-average chips can be of different levels, we
-                    //  group together identical ones and aim for their true complement
-                    int lastProcessed = 0;
-                    while (lastProcessed < lowers)
+                    ChipCode newCode = new ChipCode(Actual);
+                    if (IsFusionLower)
                     {
-                        // This section gets a count of identical chips
-                        ChipCode common = children[lastProcessed].Code;
-                        int count;
-                        for (count = 1; count < lowers - lastProcessed; count++)
-                            if (output[lastProcessed + count].Code != common) break;
-
-                        // This section obtains those chips and organizes them
-                        ChipCode complement = common.GetFuseComplement(code);
-                        List<VirtualChip> uppers = AcquireHighest(ref set, complement, count);
-                        uppers.Sort((x, y) => x.Code > y.Code);
-                        children.AddRange(uppers);
-
-                        // Mark how many chips have been finished
-                        lastProcessed += count;
+                        Complement.Code = newCode.GetFuseComplement(ChipCode.Fuse(Code, Complement.Code));
+                        queue.Enqueue(Complement);
                     }
-
-                    // Move all the chips we've collected into fusions
-                    for (int i = 0; i < qty; i++)
-                    {
-                        output[i].Lower = children[i];
-                        output[i].Upper = children[2 * qty - i - 1];
-                    }
+                    Code = newCode;
+                    return;
                 }
 
-                // Return our results!
-                return output;
+                // We couldn't get an actual chip. So we create a fusion instead!
+                if (Level == 0) return; // Can't fuse to create a level 0 chip
+                Fusion = new VirtualChip(Code.GetDefuseLower());
+                Fusion.Complement = new VirtualChip(Code.GetDefuseUpper());
+
+                // Add chips to the queue
+                if (IsFusionLower) queue.Enqueue(Complement);
+                queue.Enqueue(Fusion);
             }
 
-            /// <summary>
-            /// (Of a VirtualChip) Removes empty sub-chips and filles a list with ready-to-fuse chips
-            /// </summary>
-            /// <param name="fusions">List to output fusions in to</param>
-            public void PruneAndReport(ref List<VirtualChip> fusions)
+            public void ReportFusions(ref List<VirtualChip> fusions)
             {
-                // No reports or pruning on actual chips
-                if (!IsFusion) return;
+                if (HasFusion) Fusion.ReportFusions(ref fusions);
+                if (IsFusionLower) Complement.ReportFusions(ref fusions);
+                if (CanBeFused) fusions.Add(this);
+            }
 
-                // Handle the children
-                if (Lower?.IsEmpty ?? true) Lower = null;
-                else Lower.PruneAndReport(ref fusions);
-
-                if (Upper?.IsEmpty ?? true) Upper = null;
-                else Upper.PruneAndReport(ref fusions);
-
-                // Report!
-                if (CanFuse) fusions.Add(this);
+            public override string ToString()
+            {
+                return String.Format("{0} +{1} [{2}] | {3} | {4}", 
+                    Type, 
+                    Level, 
+                    Weight, 
+                    IsFusionLower ? "Is  Fusion" : "Not Fusion",
+                    HasActual ? "Has Actual" : HasFusion ? "Has Fusion" : "Has None"
+                    );
             }
         }
-
-        public static readonly ChipCode[] DesiredChips =
+                
+        readonly ChipCode[] DesiredChips =
         {
             new ChipCode(0x01, 8, 21), // Name = "Weapon Attack Up"
             new ChipCode(0x02, 8, 21), // Name = "Down-Attack Up"
@@ -508,22 +407,30 @@ namespace NieR.Automata.Toolkit
             // Create our chipset from the input chips
             ChipSet chipSet = new ChipSet();
             foreach (Chip chip in chips) 
-                if (chip.Type != Chip.Empty.Type && chip.HasLevels) chipSet.Add(new VirtualChip(chip));
+                if (chip.Type != Chip.Empty.Type && chip.HasLevels) chipSet.Add(chip);
 
-            // Create virtual chips and fusions
-            foreach (ChipCode target in DesiredChips)
+            // Create our target chips
+            PriorityQueue<VirtualChip> queue = new PriorityQueue<VirtualChip>(Comparer<VirtualChip>.Default);
+            VirtualChip[] endChips = new VirtualChip[DesiredChips.Length];
+            for (int i = 0; i < DesiredChips.Length; i++)
             {
-                // Since we request 1 and allow fusions, we're guaranteed 1 chip
-                VirtualChip chip = VirtualChip.AcquireLowest(ref chipSet, target)[0];
-                chip.PruneAndReport(ref Fusions);
+                endChips[i] = new VirtualChip(DesiredChips[i]);
+                queue.Enqueue(endChips[i]);
             }
 
-            // Any unused chips after the greedy pass are sold
-            foreach (VirtualChip chip in chipSet)
-                if (!chip.IsFusion) SellChips.Add(chip.Actual);
+            // Evaluate all the chips!
+            while (queue.TryDequeue(out var chip))
+                chip.Resolve(ref chipSet, ref queue);
 
-            // This sort makes it easier to read through
-            Fusions.Sort((x, y) => x.Code > y.Code);
+            // Second traversal gets all the fusions
+            foreach (var chip in endChips)
+                chip.ReportFusions(ref Fusions);
+            Fusions.Sort((x, y) => x.Code.CompareTo(y.Code));
+
+            // Any unused chips are marked for sale
+            foreach (Chip chip in chipSet)
+                SellChips.Add(chip);
+            //SellChips.Sort((x, y) => new ChipCode(x).CompareTo(new ChipCode(y)));
         }
 
     }

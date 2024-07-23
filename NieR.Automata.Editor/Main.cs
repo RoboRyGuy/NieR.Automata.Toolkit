@@ -142,21 +142,22 @@ namespace NieR.Automata.Toolkit
             tabControl.Enabled = true;
             saveToolStripMenuItem.Enabled = true;
 
-            for (int i = 0; i < _save.Chips.Count; i++)
-            {
-                int weight;
-                if (i < 8) weight = 4;
-                else if (i < 48) weight = 5;
-                else if (i < 128) weight = 6;
-                else if (i < 208) weight = 7;
-                else if (i < 248) weight = 8;
-                else weight = 9;
-
-                _save.Chips[i].ChangeType(0x01);
-                _save.Chips[i].Level = 0;
-                _save.Chips[i].Weight = weight;
-            }
-            chipsListView.SetObjects(_save.Chips);
+            // This falsifies our chips with a perfect set of level zeros (for testing)
+            //for (int i = 0; i < _save.Chips.Count; i++)
+            //{
+            //    int weight;
+            //    if (i < 8) weight = 4;
+            //    else if (i < 48) weight = 5;
+            //    else if (i < 128) weight = 6;
+            //    else if (i < 208) weight = 7;
+            //    else if (i < 248) weight = 8;
+            //    else weight = 9;
+            //
+            //    _save.Chips[i].ChangeType(0x01);
+            //    _save.Chips[i].Level = 0;
+            //    _save.Chips[i].Weight = weight;
+            //}
+            //chipsListView.SetObjects(_save.Chips);
 
             _chipOptimizer = new ChipOptimizer();
             _chipOptimizer.Load(_save.Chips);

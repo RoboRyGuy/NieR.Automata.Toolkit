@@ -684,23 +684,23 @@
             // 
             // olvColumn5
             // 
-            this.olvColumn5.AspectName = "Lower.Name";
+            this.olvColumn5.AspectName = "Name";
             this.olvColumn5.Text = "Name";
             this.olvColumn5.Width = 239;
             // 
             // olvColumn6
             // 
-            this.olvColumn6.AspectName = "Lower.Level";
+            this.olvColumn6.AspectName = "Level";
             this.olvColumn6.Text = "Level";
             // 
             // olvColumn7
             // 
-            this.olvColumn7.AspectName = "Lower.Weight";
+            this.olvColumn7.AspectName = "Weight";
             this.olvColumn7.Text = "Weight 1";
             // 
             // olvColumn8
             // 
-            this.olvColumn8.AspectName = "Upper.Weight";
+            this.olvColumn8.AspectName = "Complement.Weight";
             this.olvColumn8.Text = "Weight 2";
             // 
             // tabPage3
