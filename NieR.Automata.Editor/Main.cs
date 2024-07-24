@@ -16,6 +16,7 @@ namespace NieR.Automata.Toolkit
 {
     public partial class Main : Form
     {
+        // Support class for sorting chips (and really any ObjectListView list)
         private class MultiSorter<TValue> : Comparer<OLVListItem>
         {
             public SortOrder Order { get; private set; }
@@ -124,7 +125,7 @@ namespace NieR.Automata.Toolkit
         private void _watcher_Changed(object sender, FileSystemEventArgs e)
         {
             if (e.FullPath == _savePath)
-                LoadSave(_savePath);
+                BeginInvoke(() => LoadSave(_savePath));
         }
 
         private void load1ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -158,7 +159,18 @@ namespace NieR.Automata.Toolkit
                 return;
             }
 
-            var data = File.ReadAllBytes(path);
+            // Wrapped in a loop to keep trying until the save is available
+            byte[] data;
+            while (true)
+            {
+                try
+                {
+                    data = File.ReadAllBytes(path);
+                    break;
+                }
+                catch (IOException) { }
+            }
+            
             _save.Load(data);
             _savePath = path;
 
@@ -175,23 +187,11 @@ namespace NieR.Automata.Toolkit
             tabControl.Enabled = true;
             saveToolStripMenuItem.Enabled = true;
 
-            // This falsifies our chips with a perfect set of level zeros (for testing)
-            //for (int i = 0; i < _save.Chips.Count; i++)
-            //{
-            //    int weight;
-            //    if (i < 8) weight = 4;
-            //    else if (i < 48) weight = 5;
-            //    else if (i < 128) weight = 6;
-            //    else if (i < 208) weight = 7;
-            //    else if (i < 248) weight = 8;
-            //    else weight = 9;
-            //
-            //    _save.Chips[i].ChangeType(0x01);
-            //    _save.Chips[i].Level = 0;
-            //    _save.Chips[i].Weight = weight;
-            //}
-            //chipsListView.SetObjects(_save.Chips);
+            LoadOptimizer();
+        }
 
+        private void LoadOptimizer()
+        {
             _chipOptimizer = new ChipOptimizer();
             _chipOptimizer.Load(_save.Chips);
 

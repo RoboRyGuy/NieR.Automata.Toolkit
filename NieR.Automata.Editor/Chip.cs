@@ -4,7 +4,7 @@ using System.IO;
 
 namespace NieR.Automata.Toolkit
 {
-    public class NA_Int : IComparable, IComparable<int>
+    public struct NA_Int : IComparable, IComparable<int>
     {
         private int _value;
         public static implicit operator int(NA_Int obj) { return obj._value; }
@@ -17,13 +17,26 @@ namespace NieR.Automata.Toolkit
         }
         public int CompareTo(object other)
         {
-            NA_Int o = other as NA_Int;
-            if (o != null) return _value.CompareTo(o._value);
-            return _value.CompareTo(other);
+            if (other is NA_Int) return _value.CompareTo(((NA_Int)other)._value);
+            else return _value.CompareTo(other);
         }
+        public override int GetHashCode() { return _value.GetHashCode(); }
+        public override bool Equals(object other) 
+        {
+            if (other is NA_Int) return Equals((NA_Int)other);
+            else if (other is int) return _value.Equals((int)other);
+            else return false;
+        }
+        public bool Equals(NA_Int other) { return _value == other._value; }
+        public static bool operator ==(NA_Int a, NA_Int b) { return a._value == b._value; }
+        public static bool operator !=(NA_Int a, NA_Int b) { return a._value != b._value; }
+        public static bool operator <(NA_Int a, NA_Int b) { return a._value < b._value; }
+        public static bool operator >(NA_Int a, NA_Int b) { return a._value > b._value; }
+        public static bool operator <=(NA_Int a, NA_Int b) { return a._value <= b._value; }
+        public static bool operator >=(NA_Int a, NA_Int b) { return a._value >= b._value; }
     }
 
-    class Chip
+        class Chip
     {
         private static readonly byte[] Padding =
         {

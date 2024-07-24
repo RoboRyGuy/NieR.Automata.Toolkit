@@ -35,27 +35,37 @@
             System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
             System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            System.Windows.Forms.TabPage tabPage1;
-            System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-            System.Windows.Forms.Label label5;
-            System.Windows.Forms.Label label3;
-            System.Windows.Forms.Label label2;
-            System.Windows.Forms.Label label1;
-            System.Windows.Forms.Label label4;
             System.Windows.Forms.TabPage tabPage2;
             System.Windows.Forms.TabPage tabPage5;
+            System.Windows.Forms.TabPage tabPage1;
+            System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+            System.Windows.Forms.Label label4;
+            System.Windows.Forms.Label label1;
+            System.Windows.Forms.Label label2;
+            System.Windows.Forms.Label label3;
+            System.Windows.Forms.Label label5;
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoReloadFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.load1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.load2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.load3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.levelLabel = new System.Windows.Forms.Label();
-            this.characterNameBox = new System.Windows.Forms.TextBox();
-            this.moneyUpDown = new System.Windows.Forms.NumericUpDown();
-            this.experienceUpDown = new System.Windows.Forms.NumericUpDown();
-            this.headerIdBox = new System.Windows.Forms.TextBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.weaponsListView = new BrightIdeasSoftware.ObjectListView();
+            this.weaponPositionColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.weaponObtainedColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.weaponNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.weaponLevelColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.sellChipsListView = new BrightIdeasSoftware.ObjectListView();
+            this.sellChipsNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.sellChipsLevelColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.sellChipsWeightColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.fuseChipsListView = new BrightIdeasSoftware.ObjectListView();
+            this.fuseChipsNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.fuseChipsLevelColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.fuseChipsWeight1Column = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.fuseChipsWeight2Column = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.chipsListView = new BrightIdeasSoftware.ObjectListView();
             this.chipsPositionColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.chipsNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -66,64 +76,52 @@
             this.corpseItemIdColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.corpseItemNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.corpseItemQuantityColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.inventoryListView = new BrightIdeasSoftware.ObjectListView();
             this.itemPositionColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.itemIdColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.itemNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.itemQuantityColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.sellChipsListView = new BrightIdeasSoftware.ObjectListView();
-            this.sellChipsNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.sellChipsLevelColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.sellChipsWeightColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.fuseChipsListView = new BrightIdeasSoftware.ObjectListView();
-            this.fuseChipsNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.fuseChipsLevelColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.fuseChipsWeight1Column = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.fuseChipsWeight2Column = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.weaponsListView = new BrightIdeasSoftware.ObjectListView();
-            this.weaponPositionColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.weaponObtainedColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.weaponNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.weaponLevelColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.headerIdBox = new System.Windows.Forms.TextBox();
+            this.experienceUpDown = new System.Windows.Forms.NumericUpDown();
+            this.moneyUpDown = new System.Windows.Forms.NumericUpDown();
+            this.characterNameBox = new System.Windows.Forms.TextBox();
+            this.levelLabel = new System.Windows.Forms.Label();
+            this.tabControl = new System.Windows.Forms.TabControl();
             menuStrip1 = new System.Windows.Forms.MenuStrip();
             fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            tabPage1 = new System.Windows.Forms.TabPage();
-            tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            label5 = new System.Windows.Forms.Label();
-            label3 = new System.Windows.Forms.Label();
-            label2 = new System.Windows.Forms.Label();
-            label1 = new System.Windows.Forms.Label();
-            label4 = new System.Windows.Forms.Label();
             tabPage2 = new System.Windows.Forms.TabPage();
             tabPage5 = new System.Windows.Forms.TabPage();
+            tabPage1 = new System.Windows.Forms.TabPage();
+            tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            label4 = new System.Windows.Forms.Label();
+            label1 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
+            label3 = new System.Windows.Forms.Label();
+            label5 = new System.Windows.Forms.Label();
             menuStrip1.SuspendLayout();
-            tabPage1.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.moneyUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.experienceUpDown)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.weaponsListView)).BeginInit();
+            this.tabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sellChipsListView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fuseChipsListView)).BeginInit();
             tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chipsListView)).BeginInit();
             tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corpseInventoryListView)).BeginInit();
-            this.tabControl.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inventoryListView)).BeginInit();
-            this.tabPage6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sellChipsListView)).BeginInit();
-            this.tabPage7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fuseChipsListView)).BeginInit();
-            this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.weaponsListView)).BeginInit();
+            tabPage1.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.experienceUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.moneyUpDown)).BeginInit();
+            this.tabControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -226,166 +224,178 @@
             this.donateToolStripMenuItem.Text = "Like this tool?";
             this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click);
             // 
-            // tabPage1
+            // tabPage3
             // 
-            tabPage1.Controls.Add(tableLayoutPanel1);
-            tabPage1.Location = new System.Drawing.Point(4, 22);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            tabPage1.Size = new System.Drawing.Size(428, 448);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "General";
-            tabPage1.UseVisualStyleBackColor = true;
+            this.tabPage3.Controls.Add(this.weaponsListView);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(428, 448);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Weapons";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel1
+            // weaponsListView
             // 
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
-            tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(422, 442);
-            tableLayoutPanel1.TabIndex = 0;
+            this.weaponsListView.AllColumns.Add(this.weaponPositionColumn);
+            this.weaponsListView.AllColumns.Add(this.weaponObtainedColumn);
+            this.weaponsListView.AllColumns.Add(this.weaponNameColumn);
+            this.weaponsListView.AllColumns.Add(this.weaponLevelColumn);
+            this.weaponsListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
+            this.weaponsListView.CellEditUseWholeCell = false;
+            this.weaponsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.weaponPositionColumn,
+            this.weaponObtainedColumn,
+            this.weaponNameColumn,
+            this.weaponLevelColumn});
+            this.weaponsListView.Cursor = System.Windows.Forms.Cursors.Default;
+            this.weaponsListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.weaponsListView.FullRowSelect = true;
+            this.weaponsListView.GridLines = true;
+            this.weaponsListView.HideSelection = false;
+            this.weaponsListView.Location = new System.Drawing.Point(3, 3);
+            this.weaponsListView.Name = "weaponsListView";
+            this.weaponsListView.ShowGroups = false;
+            this.weaponsListView.Size = new System.Drawing.Size(422, 442);
+            this.weaponsListView.TabIndex = 1;
+            this.weaponsListView.UseCompatibleStateImageBehavior = false;
+            this.weaponsListView.View = System.Windows.Forms.View.Details;
+            this.weaponsListView.CellEditStarting += new BrightIdeasSoftware.CellEditEventHandler(this.weaponsListView_CellEditStarting);
             // 
-            // tableLayoutPanel2
+            // weaponPositionColumn
             // 
-            this.tableLayoutPanel2.AutoSize = true;
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(label5, 0, 4);
-            this.tableLayoutPanel2.Controls.Add(this.levelLabel, 0, 4);
-            this.tableLayoutPanel2.Controls.Add(label3, 0, 3);
-            this.tableLayoutPanel2.Controls.Add(label2, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.characterNameBox, 1, 1);
-            this.tableLayoutPanel2.Controls.Add(label1, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.moneyUpDown, 1, 2);
-            this.tableLayoutPanel2.Controls.Add(this.experienceUpDown, 1, 3);
-            this.tableLayoutPanel2.Controls.Add(label4, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.headerIdBox, 1, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 159);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 5;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(416, 124);
-            this.tableLayoutPanel2.TabIndex = 0;
+            this.weaponPositionColumn.AspectName = "Position";
+            this.weaponPositionColumn.AspectToStringFormat = "[{0}]";
+            this.weaponPositionColumn.IsEditable = false;
+            this.weaponPositionColumn.Text = "Position";
             // 
-            // label5
+            // weaponObtainedColumn
             // 
-            label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            label5.AutoSize = true;
-            label5.Location = new System.Drawing.Point(3, 107);
-            label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(36, 13);
-            label5.TabIndex = 9;
-            label5.Text = "Level:";
+            this.weaponObtainedColumn.AspectName = "Obtained";
+            this.weaponObtainedColumn.CheckBoxes = true;
+            this.weaponObtainedColumn.Text = "Obtained?";
+            this.weaponObtainedColumn.Width = 80;
             // 
-            // levelLabel
+            // weaponNameColumn
             // 
-            this.levelLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.levelLabel.AutoSize = true;
-            this.levelLabel.Location = new System.Drawing.Point(96, 107);
-            this.levelLabel.Name = "levelLabel";
-            this.levelLabel.Size = new System.Drawing.Size(0, 13);
-            this.levelLabel.TabIndex = 8;
+            this.weaponNameColumn.AspectName = "Name";
+            this.weaponNameColumn.IsEditable = false;
+            this.weaponNameColumn.Text = "Name";
+            this.weaponNameColumn.Width = 200;
             // 
-            // label3
+            // weaponLevelColumn
             // 
-            label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(3, 84);
-            label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(63, 13);
-            label3.TabIndex = 5;
-            label3.Text = "Experience:";
+            this.weaponLevelColumn.AspectName = "Level";
+            this.weaponLevelColumn.Text = "Level";
             // 
-            // label2
+            // tabPage6
             // 
-            label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(3, 58);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(42, 13);
-            label2.TabIndex = 4;
-            label2.Text = "Money:";
+            this.tabPage6.Controls.Add(this.fuseChipsListView);
+            this.tabPage6.Controls.Add(this.sellChipsListView);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(428, 448);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "Chip Recs";
+            this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // characterNameBox
+            // sellChipsListView
             // 
-            this.characterNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.characterNameBox.Location = new System.Drawing.Point(96, 29);
-            this.characterNameBox.MaxLength = 34;
-            this.characterNameBox.Name = "characterNameBox";
-            this.characterNameBox.Size = new System.Drawing.Size(317, 20);
-            this.characterNameBox.TabIndex = 0;
+            this.sellChipsListView.AllColumns.Add(this.sellChipsNameColumn);
+            this.sellChipsListView.AllColumns.Add(this.sellChipsLevelColumn);
+            this.sellChipsListView.AllColumns.Add(this.sellChipsWeightColumn);
+            this.sellChipsListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sellChipsListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
+            this.sellChipsListView.CellEditUseWholeCell = false;
+            this.sellChipsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.sellChipsNameColumn,
+            this.sellChipsLevelColumn,
+            this.sellChipsWeightColumn});
+            this.sellChipsListView.Cursor = System.Windows.Forms.Cursors.Default;
+            this.sellChipsListView.FullRowSelect = true;
+            this.sellChipsListView.GridLines = true;
+            this.sellChipsListView.HideSelection = false;
+            this.sellChipsListView.Location = new System.Drawing.Point(3, 222);
+            this.sellChipsListView.Name = "sellChipsListView";
+            this.sellChipsListView.ShowGroups = false;
+            this.sellChipsListView.Size = new System.Drawing.Size(422, 223);
+            this.sellChipsListView.TabIndex = 1;
+            this.sellChipsListView.UseCompatibleStateImageBehavior = false;
+            this.sellChipsListView.View = System.Windows.Forms.View.Details;
             // 
-            // label1
+            // sellChipsNameColumn
             // 
-            label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(3, 32);
-            label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(87, 13);
-            label1.TabIndex = 3;
-            label1.Text = "Character Name:";
+            this.sellChipsNameColumn.AspectName = "Name";
+            this.sellChipsNameColumn.IsEditable = false;
+            this.sellChipsNameColumn.Text = "Sell Chips";
+            this.sellChipsNameColumn.Width = 298;
             // 
-            // moneyUpDown
+            // sellChipsLevelColumn
             // 
-            this.moneyUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.moneyUpDown.Location = new System.Drawing.Point(96, 55);
-            this.moneyUpDown.Maximum = new decimal(new int[] {
-            9999999,
-            0,
-            0,
-            0});
-            this.moneyUpDown.Name = "moneyUpDown";
-            this.moneyUpDown.Size = new System.Drawing.Size(317, 20);
-            this.moneyUpDown.TabIndex = 6;
-            this.moneyUpDown.ThousandsSeparator = true;
+            this.sellChipsLevelColumn.AspectName = "Level";
+            this.sellChipsLevelColumn.IsEditable = false;
+            this.sellChipsLevelColumn.Text = "Level";
             // 
-            // experienceUpDown
+            // sellChipsWeightColumn
             // 
-            this.experienceUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.experienceUpDown.Location = new System.Drawing.Point(96, 81);
-            this.experienceUpDown.Maximum = new decimal(new int[] {
-            9999999,
-            0,
-            0,
-            0});
-            this.experienceUpDown.Name = "experienceUpDown";
-            this.experienceUpDown.Size = new System.Drawing.Size(317, 20);
-            this.experienceUpDown.TabIndex = 7;
-            this.experienceUpDown.ThousandsSeparator = true;
-            this.experienceUpDown.ValueChanged += new System.EventHandler(this.experienceUpDown_ValueChanged);
+            this.sellChipsWeightColumn.AspectName = "Weight";
+            this.sellChipsWeightColumn.IsEditable = false;
+            this.sellChipsWeightColumn.Text = "Weight";
             // 
-            // label4
+            // fuseChipsListView
             // 
-            label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(3, 6);
-            label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(59, 13);
-            label4.TabIndex = 10;
-            label4.Text = "Header ID:";
+            this.fuseChipsListView.AllColumns.Add(this.fuseChipsNameColumn);
+            this.fuseChipsListView.AllColumns.Add(this.fuseChipsLevelColumn);
+            this.fuseChipsListView.AllColumns.Add(this.fuseChipsWeight1Column);
+            this.fuseChipsListView.AllColumns.Add(this.fuseChipsWeight2Column);
+            this.fuseChipsListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.fuseChipsListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
+            this.fuseChipsListView.CellEditUseWholeCell = false;
+            this.fuseChipsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.fuseChipsNameColumn,
+            this.fuseChipsLevelColumn,
+            this.fuseChipsWeight1Column,
+            this.fuseChipsWeight2Column});
+            this.fuseChipsListView.Cursor = System.Windows.Forms.Cursors.Default;
+            this.fuseChipsListView.FullRowSelect = true;
+            this.fuseChipsListView.GridLines = true;
+            this.fuseChipsListView.HideSelection = false;
+            this.fuseChipsListView.Location = new System.Drawing.Point(3, 3);
+            this.fuseChipsListView.Name = "fuseChipsListView";
+            this.fuseChipsListView.ShowGroups = false;
+            this.fuseChipsListView.Size = new System.Drawing.Size(422, 213);
+            this.fuseChipsListView.TabIndex = 1;
+            this.fuseChipsListView.UseCompatibleStateImageBehavior = false;
+            this.fuseChipsListView.View = System.Windows.Forms.View.Details;
             // 
-            // headerIdBox
+            // fuseChipsNameColumn
             // 
-            this.headerIdBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.headerIdBox.Location = new System.Drawing.Point(96, 3);
-            this.headerIdBox.MaxLength = 24;
-            this.headerIdBox.Name = "headerIdBox";
-            this.headerIdBox.Size = new System.Drawing.Size(317, 20);
-            this.headerIdBox.TabIndex = 11;
-            this.headerIdBox.TextChanged += new System.EventHandler(this.headerIdBox_TextChanged);
+            this.fuseChipsNameColumn.AspectName = "Name";
+            this.fuseChipsNameColumn.IsEditable = false;
+            this.fuseChipsNameColumn.Text = "Fuse Chips";
+            this.fuseChipsNameColumn.Width = 234;
+            // 
+            // fuseChipsLevelColumn
+            // 
+            this.fuseChipsLevelColumn.AspectName = "Level";
+            this.fuseChipsLevelColumn.IsEditable = false;
+            this.fuseChipsLevelColumn.Text = "Level";
+            // 
+            // fuseChipsWeight1Column
+            // 
+            this.fuseChipsWeight1Column.AspectName = "Weight";
+            this.fuseChipsWeight1Column.IsEditable = false;
+            this.fuseChipsWeight1Column.Text = "Weight 1";
+            // 
+            // fuseChipsWeight2Column
+            // 
+            this.fuseChipsWeight2Column.AspectName = "Complement.Weight";
+            this.fuseChipsWeight2Column.IsEditable = false;
+            this.fuseChipsWeight2Column.Text = "Weight 2";
             // 
             // tabPage2
             // 
@@ -512,25 +522,6 @@
             this.corpseItemQuantityColumn.AspectName = "Quantity";
             this.corpseItemQuantityColumn.Text = "Quantity";
             // 
-            // tabControl
-            // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl.Controls.Add(tabPage1);
-            this.tabControl.Controls.Add(this.tabPage4);
-            this.tabControl.Controls.Add(tabPage5);
-            this.tabControl.Controls.Add(tabPage2);
-            this.tabControl.Controls.Add(this.tabPage6);
-            this.tabControl.Controls.Add(this.tabPage7);
-            this.tabControl.Controls.Add(this.tabPage3);
-            this.tabControl.Enabled = false;
-            this.tabControl.Location = new System.Drawing.Point(12, 27);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(436, 474);
-            this.tabControl.TabIndex = 1;
-            // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.inventoryListView);
@@ -594,178 +585,184 @@
             this.itemQuantityColumn.AspectName = "Quantity";
             this.itemQuantityColumn.Text = "Quantity";
             // 
-            // tabPage6
+            // tabPage1
             // 
-            this.tabPage6.Controls.Add(this.sellChipsListView);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(428, 448);
-            this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "Sell Chips";
-            this.tabPage6.UseVisualStyleBackColor = true;
+            tabPage1.Controls.Add(tableLayoutPanel1);
+            tabPage1.Location = new System.Drawing.Point(4, 22);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            tabPage1.Size = new System.Drawing.Size(428, 448);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "General";
+            tabPage1.UseVisualStyleBackColor = true;
             // 
-            // sellChipsListView
+            // tableLayoutPanel1
             // 
-            this.sellChipsListView.AllColumns.Add(this.sellChipsNameColumn);
-            this.sellChipsListView.AllColumns.Add(this.sellChipsLevelColumn);
-            this.sellChipsListView.AllColumns.Add(this.sellChipsWeightColumn);
-            this.sellChipsListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
-            this.sellChipsListView.CellEditUseWholeCell = false;
-            this.sellChipsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.sellChipsNameColumn,
-            this.sellChipsLevelColumn,
-            this.sellChipsWeightColumn});
-            this.sellChipsListView.Cursor = System.Windows.Forms.Cursors.Default;
-            this.sellChipsListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sellChipsListView.FullRowSelect = true;
-            this.sellChipsListView.GridLines = true;
-            this.sellChipsListView.HideSelection = false;
-            this.sellChipsListView.Location = new System.Drawing.Point(3, 3);
-            this.sellChipsListView.Name = "sellChipsListView";
-            this.sellChipsListView.ShowGroups = false;
-            this.sellChipsListView.Size = new System.Drawing.Size(422, 442);
-            this.sellChipsListView.TabIndex = 1;
-            this.sellChipsListView.UseCompatibleStateImageBehavior = false;
-            this.sellChipsListView.View = System.Windows.Forms.View.Details;
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
+            tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new System.Drawing.Size(422, 442);
+            tableLayoutPanel1.TabIndex = 0;
             // 
-            // sellChipsNameColumn
+            // tableLayoutPanel2
             // 
-            this.sellChipsNameColumn.AspectName = "Name";
-            this.sellChipsNameColumn.Text = "Name";
-            this.sellChipsNameColumn.Width = 298;
+            this.tableLayoutPanel2.AutoSize = true;
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Controls.Add(label5, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.levelLabel, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(label3, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(label2, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.characterNameBox, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(label1, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.moneyUpDown, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.experienceUpDown, 1, 3);
+            this.tableLayoutPanel2.Controls.Add(label4, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.headerIdBox, 1, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 159);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 5;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(416, 124);
+            this.tableLayoutPanel2.TabIndex = 0;
             // 
-            // sellChipsLevelColumn
+            // headerIdBox
             // 
-            this.sellChipsLevelColumn.AspectName = "Level";
-            this.sellChipsLevelColumn.Text = "Level";
+            this.headerIdBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.headerIdBox.Location = new System.Drawing.Point(96, 3);
+            this.headerIdBox.MaxLength = 24;
+            this.headerIdBox.Name = "headerIdBox";
+            this.headerIdBox.Size = new System.Drawing.Size(317, 20);
+            this.headerIdBox.TabIndex = 11;
+            this.headerIdBox.TextChanged += new System.EventHandler(this.headerIdBox_TextChanged);
             // 
-            // sellChipsWeightColumn
+            // label4
             // 
-            this.sellChipsWeightColumn.AspectName = "Weight";
-            this.sellChipsWeightColumn.Text = "Weight";
+            label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(3, 6);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(59, 13);
+            label4.TabIndex = 10;
+            label4.Text = "Header ID:";
             // 
-            // tabPage7
+            // experienceUpDown
             // 
-            this.tabPage7.Controls.Add(this.fuseChipsListView);
-            this.tabPage7.Location = new System.Drawing.Point(4, 22);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(428, 448);
-            this.tabPage7.TabIndex = 6;
-            this.tabPage7.Text = "Fuse Chips";
-            this.tabPage7.UseVisualStyleBackColor = true;
+            this.experienceUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.experienceUpDown.Location = new System.Drawing.Point(96, 81);
+            this.experienceUpDown.Maximum = new decimal(new int[] {
+            9999999,
+            0,
+            0,
+            0});
+            this.experienceUpDown.Name = "experienceUpDown";
+            this.experienceUpDown.Size = new System.Drawing.Size(317, 20);
+            this.experienceUpDown.TabIndex = 7;
+            this.experienceUpDown.ThousandsSeparator = true;
+            this.experienceUpDown.ValueChanged += new System.EventHandler(this.experienceUpDown_ValueChanged);
             // 
-            // fuseChipsListView
+            // moneyUpDown
             // 
-            this.fuseChipsListView.AllColumns.Add(this.fuseChipsNameColumn);
-            this.fuseChipsListView.AllColumns.Add(this.fuseChipsLevelColumn);
-            this.fuseChipsListView.AllColumns.Add(this.fuseChipsWeight1Column);
-            this.fuseChipsListView.AllColumns.Add(this.fuseChipsWeight2Column);
-            this.fuseChipsListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
-            this.fuseChipsListView.CellEditUseWholeCell = false;
-            this.fuseChipsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.fuseChipsNameColumn,
-            this.fuseChipsLevelColumn,
-            this.fuseChipsWeight1Column,
-            this.fuseChipsWeight2Column});
-            this.fuseChipsListView.Cursor = System.Windows.Forms.Cursors.Default;
-            this.fuseChipsListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fuseChipsListView.FullRowSelect = true;
-            this.fuseChipsListView.GridLines = true;
-            this.fuseChipsListView.HideSelection = false;
-            this.fuseChipsListView.Location = new System.Drawing.Point(3, 3);
-            this.fuseChipsListView.Name = "fuseChipsListView";
-            this.fuseChipsListView.ShowGroups = false;
-            this.fuseChipsListView.Size = new System.Drawing.Size(422, 442);
-            this.fuseChipsListView.TabIndex = 1;
-            this.fuseChipsListView.UseCompatibleStateImageBehavior = false;
-            this.fuseChipsListView.View = System.Windows.Forms.View.Details;
+            this.moneyUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.moneyUpDown.Location = new System.Drawing.Point(96, 55);
+            this.moneyUpDown.Maximum = new decimal(new int[] {
+            9999999,
+            0,
+            0,
+            0});
+            this.moneyUpDown.Name = "moneyUpDown";
+            this.moneyUpDown.Size = new System.Drawing.Size(317, 20);
+            this.moneyUpDown.TabIndex = 6;
+            this.moneyUpDown.ThousandsSeparator = true;
             // 
-            // fuseChipsNameColumn
+            // label1
             // 
-            this.fuseChipsNameColumn.AspectName = "Name";
-            this.fuseChipsNameColumn.Text = "Name";
-            this.fuseChipsNameColumn.Width = 239;
+            label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(3, 32);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(87, 13);
+            label1.TabIndex = 3;
+            label1.Text = "Character Name:";
             // 
-            // fuseChipsLevelColumn
+            // characterNameBox
             // 
-            this.fuseChipsLevelColumn.AspectName = "Level";
-            this.fuseChipsLevelColumn.Text = "Level";
+            this.characterNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.characterNameBox.Location = new System.Drawing.Point(96, 29);
+            this.characterNameBox.MaxLength = 34;
+            this.characterNameBox.Name = "characterNameBox";
+            this.characterNameBox.Size = new System.Drawing.Size(317, 20);
+            this.characterNameBox.TabIndex = 0;
             // 
-            // fuseChipsWeight1Column
+            // label2
             // 
-            this.fuseChipsWeight1Column.AspectName = "Weight";
-            this.fuseChipsWeight1Column.Text = "Weight 1";
+            label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(3, 58);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(42, 13);
+            label2.TabIndex = 4;
+            label2.Text = "Money:";
             // 
-            // fuseChipsWeight2Column
+            // label3
             // 
-            this.fuseChipsWeight2Column.AspectName = "Complement.Weight";
-            this.fuseChipsWeight2Column.Text = "Weight 2";
+            label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            label3.AutoSize = true;
+            label3.Location = new System.Drawing.Point(3, 84);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(63, 13);
+            label3.TabIndex = 5;
+            label3.Text = "Experience:";
             // 
-            // tabPage3
+            // levelLabel
             // 
-            this.tabPage3.Controls.Add(this.weaponsListView);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(428, 448);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Weapons";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.levelLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.levelLabel.AutoSize = true;
+            this.levelLabel.Location = new System.Drawing.Point(96, 107);
+            this.levelLabel.Name = "levelLabel";
+            this.levelLabel.Size = new System.Drawing.Size(0, 13);
+            this.levelLabel.TabIndex = 8;
             // 
-            // weaponsListView
+            // label5
             // 
-            this.weaponsListView.AllColumns.Add(this.weaponPositionColumn);
-            this.weaponsListView.AllColumns.Add(this.weaponObtainedColumn);
-            this.weaponsListView.AllColumns.Add(this.weaponNameColumn);
-            this.weaponsListView.AllColumns.Add(this.weaponLevelColumn);
-            this.weaponsListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
-            this.weaponsListView.CellEditUseWholeCell = false;
-            this.weaponsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.weaponPositionColumn,
-            this.weaponObtainedColumn,
-            this.weaponNameColumn,
-            this.weaponLevelColumn});
-            this.weaponsListView.Cursor = System.Windows.Forms.Cursors.Default;
-            this.weaponsListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.weaponsListView.FullRowSelect = true;
-            this.weaponsListView.GridLines = true;
-            this.weaponsListView.HideSelection = false;
-            this.weaponsListView.Location = new System.Drawing.Point(3, 3);
-            this.weaponsListView.Name = "weaponsListView";
-            this.weaponsListView.ShowGroups = false;
-            this.weaponsListView.Size = new System.Drawing.Size(422, 442);
-            this.weaponsListView.TabIndex = 1;
-            this.weaponsListView.UseCompatibleStateImageBehavior = false;
-            this.weaponsListView.View = System.Windows.Forms.View.Details;
-            this.weaponsListView.CellEditStarting += new BrightIdeasSoftware.CellEditEventHandler(this.weaponsListView_CellEditStarting);
+            label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            label5.AutoSize = true;
+            label5.Location = new System.Drawing.Point(3, 107);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(36, 13);
+            label5.TabIndex = 9;
+            label5.Text = "Level:";
             // 
-            // weaponPositionColumn
+            // tabControl
             // 
-            this.weaponPositionColumn.AspectName = "Position";
-            this.weaponPositionColumn.AspectToStringFormat = "[{0}]";
-            this.weaponPositionColumn.IsEditable = false;
-            this.weaponPositionColumn.Text = "Position";
-            // 
-            // weaponObtainedColumn
-            // 
-            this.weaponObtainedColumn.AspectName = "Obtained";
-            this.weaponObtainedColumn.CheckBoxes = true;
-            this.weaponObtainedColumn.Text = "Obtained?";
-            this.weaponObtainedColumn.Width = 80;
-            // 
-            // weaponNameColumn
-            // 
-            this.weaponNameColumn.AspectName = "Name";
-            this.weaponNameColumn.IsEditable = false;
-            this.weaponNameColumn.Text = "Name";
-            this.weaponNameColumn.Width = 200;
-            // 
-            // weaponLevelColumn
-            // 
-            this.weaponLevelColumn.AspectName = "Level";
-            this.weaponLevelColumn.Text = "Level";
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl.Controls.Add(tabPage1);
+            this.tabControl.Controls.Add(this.tabPage4);
+            this.tabControl.Controls.Add(tabPage5);
+            this.tabControl.Controls.Add(tabPage2);
+            this.tabControl.Controls.Add(this.tabPage6);
+            this.tabControl.Controls.Add(this.tabPage3);
+            this.tabControl.Enabled = false;
+            this.tabControl.Location = new System.Drawing.Point(12, 27);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(436, 474);
+            this.tabControl.TabIndex = 1;
             // 
             // Main
             // 
@@ -780,26 +777,25 @@
             this.Load += new System.EventHandler(this.Main_Load);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.weaponsListView)).EndInit();
+            this.tabPage6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.sellChipsListView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fuseChipsListView)).EndInit();
+            tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chipsListView)).EndInit();
+            tabPage5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.corpseInventoryListView)).EndInit();
+            this.tabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.inventoryListView)).EndInit();
             tabPage1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.moneyUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.experienceUpDown)).EndInit();
-            tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chipsListView)).EndInit();
-            tabPage5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.corpseInventoryListView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.moneyUpDown)).EndInit();
             this.tabControl.ResumeLayout(false);
-            this.tabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.inventoryListView)).EndInit();
-            this.tabPage6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sellChipsListView)).EndInit();
-            this.tabPage7.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.fuseChipsListView)).EndInit();
-            this.tabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.weaponsListView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -810,48 +806,47 @@
         private System.Windows.Forms.ToolStripMenuItem load2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem load3ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.TextBox characterNameBox;
-        private System.Windows.Forms.NumericUpDown moneyUpDown;
-        private System.Windows.Forms.NumericUpDown experienceUpDown;
-        private System.Windows.Forms.Label levelLabel;
-        private System.Windows.Forms.TextBox headerIdBox;
-        private BrightIdeasSoftware.OLVColumn chipsNameColumn;
-        private BrightIdeasSoftware.OLVColumn chipsLevelColumn;
-        private BrightIdeasSoftware.OLVColumn chipsWeightColumn;
+        private System.Windows.Forms.ToolStripMenuItem autoReloadFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.TabPage tabPage4;
-        private BrightIdeasSoftware.ObjectListView chipsListView;
-        private BrightIdeasSoftware.OLVColumn chipsPositionColumn;
         private BrightIdeasSoftware.ObjectListView weaponsListView;
         private BrightIdeasSoftware.OLVColumn weaponPositionColumn;
-        private BrightIdeasSoftware.OLVColumn weaponNameColumn;
         private BrightIdeasSoftware.OLVColumn weaponObtainedColumn;
+        private BrightIdeasSoftware.OLVColumn weaponNameColumn;
         private BrightIdeasSoftware.OLVColumn weaponLevelColumn;
-        private BrightIdeasSoftware.ObjectListView inventoryListView;
-        private BrightIdeasSoftware.OLVColumn itemPositionColumn;
-        private BrightIdeasSoftware.OLVColumn itemIdColumn;
-        private BrightIdeasSoftware.OLVColumn itemQuantityColumn;
-        private BrightIdeasSoftware.ObjectListView corpseInventoryListView;
-        private BrightIdeasSoftware.OLVColumn corpseItemPositionColumn;
-        private BrightIdeasSoftware.OLVColumn corpseItemIdColumn;
-        private BrightIdeasSoftware.OLVColumn corpseItemQuantityColumn;
-        private BrightIdeasSoftware.OLVColumn itemNameColumn;
-        private BrightIdeasSoftware.OLVColumn corpseItemNameColumn;
         private System.Windows.Forms.TabPage tabPage6;
-        private System.Windows.Forms.TabPage tabPage7;
-        private BrightIdeasSoftware.ObjectListView sellChipsListView;
-        private BrightIdeasSoftware.OLVColumn sellChipsNameColumn;
-        private BrightIdeasSoftware.OLVColumn sellChipsLevelColumn;
-        private BrightIdeasSoftware.OLVColumn sellChipsWeightColumn;
         private BrightIdeasSoftware.ObjectListView fuseChipsListView;
         private BrightIdeasSoftware.OLVColumn fuseChipsNameColumn;
         private BrightIdeasSoftware.OLVColumn fuseChipsLevelColumn;
         private BrightIdeasSoftware.OLVColumn fuseChipsWeight1Column;
         private BrightIdeasSoftware.OLVColumn fuseChipsWeight2Column;
-        private System.Windows.Forms.ToolStripMenuItem autoReloadFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
+        private BrightIdeasSoftware.ObjectListView sellChipsListView;
+        private BrightIdeasSoftware.OLVColumn sellChipsNameColumn;
+        private BrightIdeasSoftware.OLVColumn sellChipsLevelColumn;
+        private BrightIdeasSoftware.OLVColumn sellChipsWeightColumn;
+        private BrightIdeasSoftware.ObjectListView chipsListView;
+        private BrightIdeasSoftware.OLVColumn chipsPositionColumn;
+        private BrightIdeasSoftware.OLVColumn chipsNameColumn;
+        private BrightIdeasSoftware.OLVColumn chipsLevelColumn;
+        private BrightIdeasSoftware.OLVColumn chipsWeightColumn;
+        private BrightIdeasSoftware.ObjectListView corpseInventoryListView;
+        private BrightIdeasSoftware.OLVColumn corpseItemPositionColumn;
+        private BrightIdeasSoftware.OLVColumn corpseItemIdColumn;
+        private BrightIdeasSoftware.OLVColumn corpseItemNameColumn;
+        private BrightIdeasSoftware.OLVColumn corpseItemQuantityColumn;
+        private System.Windows.Forms.TabPage tabPage4;
+        private BrightIdeasSoftware.ObjectListView inventoryListView;
+        private BrightIdeasSoftware.OLVColumn itemPositionColumn;
+        private BrightIdeasSoftware.OLVColumn itemIdColumn;
+        private BrightIdeasSoftware.OLVColumn itemNameColumn;
+        private BrightIdeasSoftware.OLVColumn itemQuantityColumn;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Label levelLabel;
+        private System.Windows.Forms.TextBox characterNameBox;
+        private System.Windows.Forms.NumericUpDown moneyUpDown;
+        private System.Windows.Forms.NumericUpDown experienceUpDown;
+        private System.Windows.Forms.TextBox headerIdBox;
+        private System.Windows.Forms.TabControl tabControl;
     }
 }
 

@@ -74,12 +74,14 @@ namespace NieR.Automata.Toolkit
             public Chip Pop(ChipCode code)
             {
                 if (_set.TryGetValue(code, out var chips))
+                {
                     if (chips.Count > 0)
                     {
                         var chip = chips.Pop();
                         if (chips.Count == 0) _set.Remove(code);
                         return chip;
                     }
+                }
                 return null;
             }
 
@@ -170,6 +172,8 @@ namespace NieR.Automata.Toolkit
             public int Level;
             public int Weight;
 
+            public String Name => Chip.Chips[Type].Name;
+
             public ChipCode(int type, int level, int weight)
             {
                 this.Type = type;
@@ -228,6 +232,15 @@ namespace NieR.Automata.Toolkit
             {
                 // Create unique int based on our stats and hash that instead
                 return (Type << 16 | Level << 8 | Weight).GetHashCode();
+            }
+
+            public override string ToString()
+            {
+                return String.Format("{0} +{1} [{2}]",
+                    Name,
+                    Level,
+                    Weight
+                    );
             }
         }
 
@@ -297,10 +310,11 @@ namespace NieR.Automata.Toolkit
 
             public int CompareTo(VirtualChip other)
             {
+                // First by type ascending, then level descending, then weight ascending, then prefer upper fusions
                 if (Type.CompareTo(other.Type) != 0) return Type.CompareTo(other.Type);
                 else if (Level.CompareTo(other.Level) != 0) return -Level.CompareTo(other.Level);
                 else if (Weight.CompareTo(other.Weight) != 0) return Weight.CompareTo(other.Weight);
-                else if (IsFusionLower.CompareTo(other.IsFusionLower) != 0) return -IsFusionLower.CompareTo(other.IsFusionLower);
+                else if (IsFusionLower.CompareTo(other.IsFusionLower) != 0) return IsFusionLower.CompareTo(other.IsFusionLower);
                 else return 0;
             }
 
@@ -313,7 +327,7 @@ namespace NieR.Automata.Toolkit
                 int i;
                 if (IsFusionLower)
                     for (i = Chip.MinimumWeightForLevel[Level]; i <= Weight; i++)
-                        if (chips.TryPop(new ChipCode(Type, Level, i), out _actual)) break; else;
+                        if (chips.TryPop(new ChipCode(Type, Level, i), out _actual)) break; else { }
                 else
                     for (i = Weight; i >= Chip.MinimumWeightForLevel[Level]; i--)
                         if (chips.TryPop(new ChipCode(Type, Level, i), out _actual)) break;
@@ -323,22 +337,19 @@ namespace NieR.Automata.Toolkit
                 {
                     ChipCode newCode = new ChipCode(Actual);
                     if (IsFusionLower)
-                    {
                         Complement.Code = newCode.GetFuseComplement(ChipCode.Fuse(Code, Complement.Code));
-                        queue.Enqueue(Complement);
-                    }
                     Code = newCode;
-                    return;
+                }
+                else if (Level != 0) // Can't create fusions for level 0 chips
+                {
+                    // We couldn't get an actual chip. So we create a fusion instead!
+                    Fusion = new VirtualChip(Code.GetDefuseLower());
+                    Fusion.Complement = new VirtualChip(Code.GetDefuseUpper());
+                    queue.Enqueue(Fusion);
                 }
 
-                // We couldn't get an actual chip. So we create a fusion instead!
-                if (Level == 0) return; // Can't fuse to create a level 0 chip
-                Fusion = new VirtualChip(Code.GetDefuseLower());
-                Fusion.Complement = new VirtualChip(Code.GetDefuseUpper());
-
-                // Add chips to the queue
+                // If we have a complement, it can now be added to the queue
                 if (IsFusionLower) queue.Enqueue(Complement);
-                queue.Enqueue(Fusion);
             }
 
             public void ReportFusions(ref List<VirtualChip> fusions)
@@ -351,7 +362,7 @@ namespace NieR.Automata.Toolkit
             public override string ToString()
             {
                 return String.Format("{0} +{1} [{2}] | {3} | {4}", 
-                    Type, 
+                    Name, 
                     Level, 
                     Weight, 
                     IsFusionLower ? "Is  Fusion" : "Not Fusion",
@@ -407,7 +418,7 @@ namespace NieR.Automata.Toolkit
             // Create our chipset from the input chips
             ChipSet chipSet = new ChipSet();
             foreach (Chip chip in chips) 
-                if (chip.Type != Chip.Empty.Type && chip.HasLevels) chipSet.Add(chip);
+                if ((chip.Type != Chip.Empty.Type) && chip.HasLevels) chipSet.Add(chip);
 
             // Create our target chips
             PriorityQueue<VirtualChip> queue = new PriorityQueue<VirtualChip>(Comparer<VirtualChip>.Default);
@@ -430,8 +441,7 @@ namespace NieR.Automata.Toolkit
             // Any unused chips are marked for sale
             foreach (Chip chip in chipSet)
                 SellChips.Add(chip);
-            //SellChips.Sort((x, y) => new ChipCode(x).CompareTo(new ChipCode(y)));
+            SellChips.Sort((x, y) => new ChipCode(x).CompareTo(new ChipCode(y)));
         }
-
     }
 }

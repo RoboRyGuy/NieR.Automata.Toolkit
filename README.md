@@ -1,29 +1,29 @@
 ﻿# NieR.Automata.Toolkit
-<p align="center">
-	<a href="https://ko-fi.com/C0C01KYIH"><img alt="ko-fi" src="https://www.ko-fi.com/img/githubbutton_sm.svg"/></a> 
-	<br />
-	<a href="LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/MysteryDash/NieR.Automata.Editor"></a>
-	<a href="https://github.com/MysteryDash/NieR.Automata.Editor/releases"><img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/MysteryDash/NieR.Automata.Editor/total"></a>
-	<br />
-	<a href="https://github.com/MysteryDash/NieR.Automata.Editor/releases"><img alt="screenshot" src="https://user-images.githubusercontent.com/4283036/79066303-d2927e80-7cf1-11ea-9e98-a85e4cec537e.png"></a>
-</p>
 
-# Notice: This fork is a WIP
+A simple save-editting toolkit for NieR.Automata:
+- Edit basic save items, including money, exp, and items
+- Recommendations for selling/fusing chips
+- [TBD] Edit outfits and hair colors
 
-A simple yet effective NieR: Automata save editor.
+## Credit
 
-## Getting Started
+This tool is a fork of [NieR.Automata.Editor by MysteryDash](https://github.com/MysteryDash/NieR.Automata.Editor)
 
-Go to the [Releases](https://github.com/MysteryDash/NieR.Automata.Editor/releases) page and download the latest version available.
+# Getting Started
 
-## Make Backups!
+Go to the [Releases](https://github.com/RoboRyGuy/NieR.Automata.Toolkit/releases) page and download the latest version available.
+
+Alternatively, clone the repository and build from source!
+
+# Make Backups!
 
 Be careful when using the save editor, and make sure that you always backup your save file before editing it.
 
-## Features
+# Features
 
-This save editor provides you with means to view and edit various parts of your save files, including:
+From the original NieR.Automata.Editor, you can edit:
 - Your header id (necessary if you use someone else's save)
+    - To do this, copy the header ID from your own save and paste in the new save
 - Your character name
 - Your money
 - Your experience
@@ -31,22 +31,48 @@ This save editor provides you with means to view and edit various parts of your 
 - Your corpse's inventory
 - Your chips
 - Your weapons
+ 
+This toolkit adds:
+- Chip fusion recommendations
+- Chip sale recommendations
+- More TBD
 
-### Prerequisite
+## How Fusion and Sell Recommendations Work
+
+Fusion and sell recommendations are generated based on the chips imported with your save
+and a list of "desired" chips (the ability to edit this list is not yet implemented). 
+When loaded, it creates a tree for each desired chip and fills it out as best it can with
+the chips in the save file, with a preference for fulfilling lower-weight chips first.
+The tree is adaptive, so if you have excessive low-weight chips they will be used for
+higher-weight chips, which in turn will allow more high-weight chips to be used.
+
+The result is: 
+- Any chip that can reasonably be used to create a fusion is marked as 'keep'
+- Any fusions that are ready immediately are marked 'fuse'
+- Any remaining chips are marked 'sell'
+
+This solution is not perfectly optimal - for example, a +3 [28] can theoretically be fused into a
++8 [21] (with enough diamond chips), but this system will discard it. That being said, this is about
+the best prediction available, and it will help guarantee you don't waste diamond chips when you 
+already have enough. It can also help keep peace-of-mind while cleaning inventory slots, knowing 
+that the chips you're selling most likely will never help you reach your desired fusion goals.
+
+# Prerequisite
 
 - [.NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 
-### Contributing
+# Contributing
 
 I appreciate any and all contributions, so please feel free to create an issue or a pull request if you would like to contribute.
 
-### License
+# License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Acknowledgments
+# Acknowledgments
 
 This project would not be what it is without the previous works of:
+- [MysteryDash](https://github.com/MysteryDash) | Created the original NieR.Automata.Editor
 - [CensoredUsername](https://github.com/CensoredUsername)
 - [JohnEdwa](https://github.com/JohnEdwa)
 - [micktu](https://github.com/micktu)
