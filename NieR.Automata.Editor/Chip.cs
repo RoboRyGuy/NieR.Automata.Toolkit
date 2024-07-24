@@ -1,8 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace NieR.Automata.Toolkit
 {
+    public class NA_Int : IComparable, IComparable<int>
+    {
+        private int _value;
+        public static implicit operator int(NA_Int obj) { return obj._value; }
+        public static implicit operator NA_Int(int val) { return new NA_Int() { _value = val }; }
+        public override string ToString() { return _value == -1 ? "N/A" : _value.ToString(); }
+
+        public int CompareTo(int other)
+        {
+            return _value.CompareTo(other);
+        }
+        public int CompareTo(object other)
+        {
+            NA_Int o = other as NA_Int;
+            if (o != null) return _value.CompareTo(o._value);
+            return _value.CompareTo(other);
+        }
+    }
+
     class Chip
     {
         private static readonly byte[] Padding =
@@ -104,14 +124,14 @@ namespace NieR.Automata.Toolkit
         public bool HasLevels { get; private set; }
         public int Position { get; private set; }
 
-        public int BaseCode { get; private set; } // Save ID = BaseCode + Level
-        public int BaseId { get; private set; } // Save ID = BaseId + Level
-        public int Type { get; private set; }
-        public int Level { get; set; }
-        public int Weight { get; set; }
-        public int SlotA { get; set; }
-        public int SlotB { get; set; }
-        public int SlotC { get; set; }
+        public NA_Int BaseCode { get; private set; } // Save ID = BaseCode + Level
+        public NA_Int BaseId { get; private set; } // Save ID = BaseId + Level
+        public NA_Int Type { get; private set; }
+        public NA_Int Level { get; set; }
+        public NA_Int Weight { get; set; }
+        public NA_Int SlotA { get; set; }
+        public NA_Int SlotB { get; set; }
+        public NA_Int SlotC { get; set; }
 
         private Chip()
         {

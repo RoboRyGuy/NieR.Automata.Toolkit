@@ -254,13 +254,13 @@ namespace NieR.Automata.Toolkit
             public String Name => Chip.Chips[Code.Type].Name;
 
             // Type of the chip this virtual chip represents
-            public int Type => Code.Type;
+            public NA_Int Type => Code.Type;
 
             // Level of the chip this virtual chip represents
-            public int Level => Code.Level;
+            public NA_Int Level => Code.Level;
 
             // Weight of the chip this virtual chip represents
-            public int Weight => Code.Weight;
+            public NA_Int Weight => Code.Weight;
 
 
             // True if this chip directly contains an actual chip

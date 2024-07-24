@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -9,11 +10,36 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
+using static NieR.Automata.Toolkit.ChipOptimizer;
 
 namespace NieR.Automata.Toolkit
 {
     public partial class Main : Form
     {
+        private class MultiSorter<TValue> : Comparer<OLVListItem>
+        {
+            public SortOrder Order { get; private set; }
+            public Func<TValue, IComparable>[] Params { get; private set; }
+            public MultiSorter(
+                in SortOrder order,
+                params Func<TValue, IComparable>[] ps
+            ) { Order=order; Params = ps; } 
+            
+            public override int Compare(OLVListItem x, OLVListItem y)
+            {
+                int diff = 0;
+                TValue a = (TValue)x.RowObject;
+                TValue b = (TValue)y.RowObject;
+
+                for (int i = 0; i < Params.Length; i++)
+                {
+                    diff = Params[i](a).CompareTo(Params[i](b));
+                    if (diff != 0) break;
+                }
+                return Order != SortOrder.Descending ? diff : -diff;
+            }
+        }
+
         private readonly string _saveDirectory;
         private readonly Regex _nonHexRegex = new Regex("[^A-Fa-f0-9]", RegexOptions.Compiled);
 
@@ -33,6 +59,13 @@ namespace NieR.Automata.Toolkit
             var myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             _saveDirectory = Path.Combine(myDocumentsPath, "My Games", "NieR_Automata");
             _save = new Save();
+
+            chipsListView.CustomSorter = chipsListView_CustomSortOrder;
+            chipsListView_CustomSortOrder(chipsPositionColumn, SortOrder.Ascending);
+            sellChipsListView.CustomSorter = chipsListView_CustomSortOrder;
+            chipsListView_CustomSortOrder(sellChipsNameColumn, SortOrder.Ascending);
+            fuseChipsListView.CustomSorter = chipsListView_CustomSortOrder;
+            chipsListView_CustomSortOrder(fuseChipsNameColumn, SortOrder.Ascending);
 
             _watcher = new FileSystemWatcher(_saveDirectory);
             _watcher.EnableRaisingEvents = false;
@@ -322,6 +355,44 @@ namespace NieR.Automata.Toolkit
             }
 
             e.Cancel = true;
+        }
+
+        private void chipsListView_CustomSortOrder(OLVColumn column, SortOrder order)
+        {
+            Func<Chip, IComparable> Pos = (x) => x.Position;
+            Func<Chip, IComparable> Name = (x) => x.Type == -1 ? "zzzzz" : x.Name;
+            Func<Chip, IComparable> Level = (x) => x.Level == -1 ? int.MaxValue : -x.Level;
+            Func<Chip, IComparable> Weight = (x) => x.Weight == -1 ? int.MaxValue : x.Weight;
+
+            Func<VirtualChip, IComparable> VName = (x) => x.Type == -1 ? "zzzzz" : x.Name; ;
+            Func<VirtualChip, IComparable> VLevel = (x) => x.Level == -1 ? int.MaxValue : -x.Level;
+            Func<VirtualChip, IComparable> VWeight = (x) => x.Weight == -1 ? int.MaxValue : x.Weight;
+            Func<VirtualChip, IComparable> VCWeight = (x) => x.Complement.Weight == -1 ? int.MaxValue : x.Complement.Weight;
+
+            if (column == chipsPositionColumn)
+                chipsListView.ListViewItemSorter = new MultiSorter<Chip>(order, Pos);
+            if (column == chipsNameColumn)
+                chipsListView.ListViewItemSorter = new MultiSorter<Chip>(order, Name, Level, Weight);
+            if (column == chipsLevelColumn)
+                chipsListView.ListViewItemSorter = new MultiSorter<Chip>(order, Level, Name, Weight);
+            if (column == chipsWeightColumn)
+                chipsListView.ListViewItemSorter = new MultiSorter<Chip>(order, Weight, Name, Level);
+
+            if (column == sellChipsNameColumn)
+                sellChipsListView.ListViewItemSorter = new MultiSorter<Chip>(order, Name, Level, Weight);
+            if (column == sellChipsLevelColumn)
+                sellChipsListView.ListViewItemSorter = new MultiSorter<Chip>(order, Level, Name, Weight);
+            if (column == sellChipsWeightColumn)
+                sellChipsListView.ListViewItemSorter = new MultiSorter<Chip>(order, Weight, Name, Level);
+
+            if (column == fuseChipsNameColumn)
+                fuseChipsListView.ListViewItemSorter = new MultiSorter<VirtualChip>(order, VName, VLevel, VWeight, VCWeight);
+            if (column == fuseChipsLevelColumn)
+                fuseChipsListView.ListViewItemSorter = new MultiSorter<VirtualChip>(order, VLevel, VName, VWeight, VCWeight);
+            if (column == fuseChipsWeight1Column)
+                fuseChipsListView.ListViewItemSorter = new MultiSorter<VirtualChip>(order, VWeight, VName, VLevel, VCWeight);
+            if (column == fuseChipsWeight2Column)
+                fuseChipsListView.ListViewItemSorter = new MultiSorter<VirtualChip>(order, VCWeight, VName, VLevel, VWeight);
         }
 
         private void weaponsListView_CellEditStarting(object sender, CellEditEventArgs e)

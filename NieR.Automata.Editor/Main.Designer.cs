@@ -75,15 +75,15 @@
             this.itemQuantityColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.sellChipsListView = new BrightIdeasSoftware.ObjectListView();
-            this.olvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumn4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.sellChipsNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.sellChipsLevelColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.sellChipsWeightColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.fuseChipsListView = new BrightIdeasSoftware.ObjectListView();
-            this.olvColumn5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumn6 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumn7 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumn8 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.fuseChipsNameColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.fuseChipsLevelColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.fuseChipsWeight1Column = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.fuseChipsWeight2Column = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.weaponsListView = new BrightIdeasSoftware.ObjectListView();
             this.weaponPositionColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -607,15 +607,15 @@
             // 
             // sellChipsListView
             // 
-            this.sellChipsListView.AllColumns.Add(this.olvColumn2);
-            this.sellChipsListView.AllColumns.Add(this.olvColumn3);
-            this.sellChipsListView.AllColumns.Add(this.olvColumn4);
+            this.sellChipsListView.AllColumns.Add(this.sellChipsNameColumn);
+            this.sellChipsListView.AllColumns.Add(this.sellChipsLevelColumn);
+            this.sellChipsListView.AllColumns.Add(this.sellChipsWeightColumn);
             this.sellChipsListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
             this.sellChipsListView.CellEditUseWholeCell = false;
             this.sellChipsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumn2,
-            this.olvColumn3,
-            this.olvColumn4});
+            this.sellChipsNameColumn,
+            this.sellChipsLevelColumn,
+            this.sellChipsWeightColumn});
             this.sellChipsListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.sellChipsListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sellChipsListView.FullRowSelect = true;
@@ -629,21 +629,21 @@
             this.sellChipsListView.UseCompatibleStateImageBehavior = false;
             this.sellChipsListView.View = System.Windows.Forms.View.Details;
             // 
-            // olvColumn2
+            // sellChipsNameColumn
             // 
-            this.olvColumn2.AspectName = "Name";
-            this.olvColumn2.Text = "Name";
-            this.olvColumn2.Width = 298;
+            this.sellChipsNameColumn.AspectName = "Name";
+            this.sellChipsNameColumn.Text = "Name";
+            this.sellChipsNameColumn.Width = 298;
             // 
-            // olvColumn3
+            // sellChipsLevelColumn
             // 
-            this.olvColumn3.AspectName = "Level";
-            this.olvColumn3.Text = "Level";
+            this.sellChipsLevelColumn.AspectName = "Level";
+            this.sellChipsLevelColumn.Text = "Level";
             // 
-            // olvColumn4
+            // sellChipsWeightColumn
             // 
-            this.olvColumn4.AspectName = "Weight";
-            this.olvColumn4.Text = "Weight";
+            this.sellChipsWeightColumn.AspectName = "Weight";
+            this.sellChipsWeightColumn.Text = "Weight";
             // 
             // tabPage7
             // 
@@ -658,17 +658,17 @@
             // 
             // fuseChipsListView
             // 
-            this.fuseChipsListView.AllColumns.Add(this.olvColumn5);
-            this.fuseChipsListView.AllColumns.Add(this.olvColumn6);
-            this.fuseChipsListView.AllColumns.Add(this.olvColumn7);
-            this.fuseChipsListView.AllColumns.Add(this.olvColumn8);
+            this.fuseChipsListView.AllColumns.Add(this.fuseChipsNameColumn);
+            this.fuseChipsListView.AllColumns.Add(this.fuseChipsLevelColumn);
+            this.fuseChipsListView.AllColumns.Add(this.fuseChipsWeight1Column);
+            this.fuseChipsListView.AllColumns.Add(this.fuseChipsWeight2Column);
             this.fuseChipsListView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
             this.fuseChipsListView.CellEditUseWholeCell = false;
             this.fuseChipsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumn5,
-            this.olvColumn6,
-            this.olvColumn7,
-            this.olvColumn8});
+            this.fuseChipsNameColumn,
+            this.fuseChipsLevelColumn,
+            this.fuseChipsWeight1Column,
+            this.fuseChipsWeight2Column});
             this.fuseChipsListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.fuseChipsListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fuseChipsListView.FullRowSelect = true;
@@ -682,26 +682,26 @@
             this.fuseChipsListView.UseCompatibleStateImageBehavior = false;
             this.fuseChipsListView.View = System.Windows.Forms.View.Details;
             // 
-            // olvColumn5
+            // fuseChipsNameColumn
             // 
-            this.olvColumn5.AspectName = "Name";
-            this.olvColumn5.Text = "Name";
-            this.olvColumn5.Width = 239;
+            this.fuseChipsNameColumn.AspectName = "Name";
+            this.fuseChipsNameColumn.Text = "Name";
+            this.fuseChipsNameColumn.Width = 239;
             // 
-            // olvColumn6
+            // fuseChipsLevelColumn
             // 
-            this.olvColumn6.AspectName = "Level";
-            this.olvColumn6.Text = "Level";
+            this.fuseChipsLevelColumn.AspectName = "Level";
+            this.fuseChipsLevelColumn.Text = "Level";
             // 
-            // olvColumn7
+            // fuseChipsWeight1Column
             // 
-            this.olvColumn7.AspectName = "Weight";
-            this.olvColumn7.Text = "Weight 1";
+            this.fuseChipsWeight1Column.AspectName = "Weight";
+            this.fuseChipsWeight1Column.Text = "Weight 1";
             // 
-            // olvColumn8
+            // fuseChipsWeight2Column
             // 
-            this.olvColumn8.AspectName = "Complement.Weight";
-            this.olvColumn8.Text = "Weight 2";
+            this.fuseChipsWeight2Column.AspectName = "Complement.Weight";
+            this.fuseChipsWeight2Column.Text = "Weight 2";
             // 
             // tabPage3
             // 
@@ -842,14 +842,14 @@
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.TabPage tabPage7;
         private BrightIdeasSoftware.ObjectListView sellChipsListView;
-        private BrightIdeasSoftware.OLVColumn olvColumn2;
-        private BrightIdeasSoftware.OLVColumn olvColumn3;
-        private BrightIdeasSoftware.OLVColumn olvColumn4;
+        private BrightIdeasSoftware.OLVColumn sellChipsNameColumn;
+        private BrightIdeasSoftware.OLVColumn sellChipsLevelColumn;
+        private BrightIdeasSoftware.OLVColumn sellChipsWeightColumn;
         private BrightIdeasSoftware.ObjectListView fuseChipsListView;
-        private BrightIdeasSoftware.OLVColumn olvColumn5;
-        private BrightIdeasSoftware.OLVColumn olvColumn6;
-        private BrightIdeasSoftware.OLVColumn olvColumn7;
-        private BrightIdeasSoftware.OLVColumn olvColumn8;
+        private BrightIdeasSoftware.OLVColumn fuseChipsNameColumn;
+        private BrightIdeasSoftware.OLVColumn fuseChipsLevelColumn;
+        private BrightIdeasSoftware.OLVColumn fuseChipsWeight1Column;
+        private BrightIdeasSoftware.OLVColumn fuseChipsWeight2Column;
         private System.Windows.Forms.ToolStripMenuItem autoReloadFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
     }
