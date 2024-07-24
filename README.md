@@ -5,21 +5,21 @@ A simple save-editting toolkit for NieR.Automata:
 - Recommendations for selling/fusing chips
 - [TBD] Edit outfits and hair colors
 
-## Credit
+### Credit
 
 This tool is a fork of [NieR.Automata.Editor by MysteryDash](https://github.com/MysteryDash/NieR.Automata.Editor)
 
-# Getting Started
+## Getting Started
 
 Go to the [Releases](https://github.com/RoboRyGuy/NieR.Automata.Toolkit/releases) page and download the latest version available.
 
 Alternatively, clone the repository and build from source!
 
-# Make Backups!
+## Make Backups!
 
 Be careful when using the save editor, and make sure that you always backup your save file before editing it.
 
-# Features
+## Features
 
 From the original NieR.Automata.Editor, you can edit:
 - Your header id (necessary if you use someone else's save)
@@ -37,7 +37,7 @@ This toolkit adds:
 - Chip sale recommendations
 - More TBD
 
-## How Fusion and Sell Recommendations Work
+### How Fusion and Sell Recommendations Work
 
 Fusion and sell recommendations are generated based on the chips imported with your save
 and a list of "desired" chips (the ability to edit this list is not yet implemented). 
@@ -57,19 +57,19 @@ the best prediction available, and it will help guarantee you don't waste diamon
 already have enough. It can also help keep peace-of-mind while cleaning inventory slots, knowing 
 that the chips you're selling most likely will never help you reach your desired fusion goals.
 
-# Prerequisite
+## Prerequisite
 
 - [.NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 
-# Contributing
+## Contributing
 
 I appreciate any and all contributions, so please feel free to create an issue or a pull request if you would like to contribute.
 
-# License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-# Acknowledgments
+## Acknowledgments
 
 This project would not be what it is without the previous works of:
 - [MysteryDash](https://github.com/MysteryDash) | Created the original NieR.Automata.Editor
