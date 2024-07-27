@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Windows.Forms;
@@ -262,6 +263,10 @@ namespace NieR.Automata.Toolkit
             private VirtualChip _complement = null;
             public VirtualChip Complement { get => _complement; private set => _complement = value; }
 
+            // If this chip is an upper fusion, if the lower actually has a chip or not
+            private bool _lowerHasActual = false;
+            public bool LowerHasActual { get => _lowerHasActual; set => _lowerHasActual = value; }
+
 
             // Name of the chip this virtual chip represents
             public String Name => Chip.Chips[Code.Type].Name;
@@ -310,12 +315,16 @@ namespace NieR.Automata.Toolkit
 
             public int CompareTo(VirtualChip other)
             {
-                // First by type ascending, then level descending, then weight ascending, then prefer upper fusions
-                if (Type.CompareTo(other.Type) != 0) return Type.CompareTo(other.Type);
-                else if (Level.CompareTo(other.Level) != 0) return -Level.CompareTo(other.Level);
-                else if (Weight.CompareTo(other.Weight) != 0) return Weight.CompareTo(other.Weight);
-                else if (IsFusionLower.CompareTo(other.IsFusionLower) != 0) return IsFusionLower.CompareTo(other.IsFusionLower);
-                else return 0;
+                return SortCode().CompareTo(other.SortCode());
+            }
+
+            public int SortCode()
+            {
+                // Sort order: Type ascending, level descending, weight ascending
+                int code = ((Type & 0xFFFF) << 16) | ((8 - (Level & 0xFFFF)) << 8) | (Weight & 0xFFFF);
+
+                // Sub-sort : Lower fusions are standard. Uppers get +1 if the lower has a chip, -1 otherwise
+                return 3 * code + (IsFusionLower ? 1 : LowerHasActual ? 0 : 2);
             }
 
             public void Resolve(ref ChipSet chips, ref PriorityQueue<VirtualChip> queue)
@@ -349,7 +358,11 @@ namespace NieR.Automata.Toolkit
                 }
 
                 // If we have a complement, it can now be added to the queue
-                if (IsFusionLower) queue.Enqueue(Complement);
+                if (IsFusionLower)
+                {
+                    Complement.LowerHasActual = HasActual;
+                    queue.Enqueue(Complement);
+                }
             }
 
             public void ReportFusions(ref List<VirtualChip> fusions)
@@ -368,6 +381,52 @@ namespace NieR.Automata.Toolkit
                     IsFusionLower ? "Is  Fusion" : "Not Fusion",
                     HasActual ? "Has Actual" : HasFusion ? "Has Fusion" : "Has None"
                     );
+            }
+
+            public string PrintTree()
+            {
+                List<string> tree = new List<string>();
+                tree.Add("");
+                int currentLine = 0;
+                string header = "";
+                PrintTree(ref tree, ref currentLine, ref header);
+
+                string output = "";
+                foreach (var s in tree) output += s + '\n';
+                return output;
+            }
+
+            public void PrintTree(ref List<string> tree, ref int currentLine, ref string header)
+            {
+                tree[currentLine] += String.Format(
+                    "[{0} {1}]",
+                    HasActual ? 'A' : IsEmpty ? 'E' : CanBeFused ? 'F' : 'P',
+                    ((int)Weight).ToString("00")
+                );
+
+                if (HasFusion)
+                {
+                    tree[currentLine] += ' ';
+                    if (IsFusionLower)
+                    {
+                        string newHeader = header + "|      ";
+                        Fusion.PrintTree(ref tree, ref currentLine, ref newHeader);
+                    }
+                    else
+                    {
+                        string newHeader = header + "       ";
+                        Fusion.PrintTree(ref tree, ref currentLine, ref newHeader);
+                    }
+                }
+                else if (HasActual)
+                    tree[currentLine] += new String('-', 62 - tree[currentLine].Length);
+
+                if (IsFusionLower)
+                {
+                    currentLine++;
+                    tree.Add(header);
+                    Complement.PrintTree(ref tree, ref currentLine, ref header);
+                }
             }
         }
                 
@@ -408,6 +467,7 @@ namespace NieR.Automata.Toolkit
             new ChipCode(0x22, 8, 21), // Name = "Heal Drops Up"
         };
 
+        public VirtualChip[] EndChips;
         public List<VirtualChip> Fusions = new List<VirtualChip>();
         public List<Chip> SellChips = new List<Chip>();
 
@@ -422,11 +482,11 @@ namespace NieR.Automata.Toolkit
 
             // Create our target chips
             PriorityQueue<VirtualChip> queue = new PriorityQueue<VirtualChip>(Comparer<VirtualChip>.Default);
-            VirtualChip[] endChips = new VirtualChip[DesiredChips.Length];
+            EndChips = new VirtualChip[DesiredChips.Length];
             for (int i = 0; i < DesiredChips.Length; i++)
             {
-                endChips[i] = new VirtualChip(DesiredChips[i]);
-                queue.Enqueue(endChips[i]);
+                EndChips[i] = new VirtualChip(DesiredChips[i]);
+                queue.Enqueue(EndChips[i]);
             }
 
             // Evaluate all the chips!
@@ -434,7 +494,7 @@ namespace NieR.Automata.Toolkit
                 chip.Resolve(ref chipSet, ref queue);
 
             // Second traversal gets all the fusions
-            foreach (var chip in endChips)
+            foreach (var chip in EndChips)
                 chip.ReportFusions(ref Fusions);
             Fusions.Sort((x, y) => x.Code.CompareTo(y.Code));
 

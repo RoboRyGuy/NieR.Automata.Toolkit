@@ -306,8 +306,12 @@ namespace NieR.Automata.Toolkit
                 e.AutoDispose = false;
                 e.Control = _chipSelectionBox;
             }
-            else if (chip != null && e.Control is NumericUpDown numericUpDown)
+            else if (chip != null && (e.Column == chipsLevelColumn || e.Column == chipsWeightColumn))
             {
+                var numericUpDown = new NumericUpDown();
+                numericUpDown.Bounds = e.CellBounds;
+                e.Control = numericUpDown;
+
                 if (e.Column == chipsLevelColumn)
                 {
                     numericUpDown.Minimum = 0;
